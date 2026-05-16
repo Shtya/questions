@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radiography Prometric — 2000Q Bank</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050810;--s1:#0a0f1e;--s2:#0d1529;--s3:#111d38;
+  --b1:#1a2744;--b2:#223052;--b3:#2a3d6b;
+  --acc:#3b82f6;--acc2:#1d4ed8;--acc3:#60a5fa;
+  --ok:#22c55e;--ok2:#16a34a;--ok3:#4ade80;
+  --err:#ef4444;--err2:#dc2626;--err3:#f87171;
+  --warn:#f59e0b;--warn2:#d97706;--warn3:#fbbf24;
+  --t1:#f0f6ff;--t2:#94b4d4;--t3:#4a6a8a;--t4:#1e3050;
+  --r:8px;--r2:14px;--r3:20px;
+  --mono:'Space Mono',monospace;
+  --sans:'Syne',sans-serif;
+  --body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden}
+
+/* grid bg */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;z-index:0
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 20% -10%,rgba(29,78,216,0.18) 0%,transparent 60%),
+             radial-gradient(ellipse 60% 80% at 80% 110%,rgba(59,130,246,0.12) 0%,transparent 60%);
+  pointer-events:none;z-index:0
+}
+#app{position:relative;z-index:1}
+
+/* ── HEADER ── */
+header{
+  background:rgba(5,8,16,0.92);border-bottom:1px solid var(--b1);
+  padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:300;backdrop-filter:blur(20px);gap:16px
+}
+.logo{display:flex;align-items:center;gap:6px;text-decoration:none}
+ 
+.logo-name{font-family:var(--sans);font-weight:800;font-size:.95rem;letter-spacing:.5px;color:var(--t1)}
+@media (max-width:700px) {
+  .logo-name{
+    font-size: 11.9px !important;
+  }
+}
+.logo-tag{font-family:var(--mono);font-size:.55rem;color:var(--t3);letter-spacing:2px;margin-top:1px;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:10px}
+#timer{
+  display:none;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--acc3);
+  background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);
+  padding:6px 14px;border-radius:var(--r);letter-spacing:2px
+}
+#timer.warn{color:var(--warn3);border-color:rgba(245,158,11,0.3);animation:blink 1s infinite}
+#timer.dng{color:var(--err3);border-color:rgba(239,68,68,0.3)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.hpill{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:1px;
+  background:var(--s2);border:1px solid var(--b1);
+  padding:6px 14px;border-radius:100px;color:var(--t2)
+}
+.hpill em{font-style:normal;color:var(--acc3)}
+#pbar-wrap{height:2px;background:var(--b1)}
+#pbar{height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc3));transition:width .4s ease}
+
+/* ── SCREEN BASE ── */
+.scr{display:none}.scr.on{display:block}
+
+/* ── START SCREEN ── */
+#scr-start.on{
+  display:grid;grid-template-columns:1fr 420px;gap:48px;
+  max-width:1200px;margin:0 auto;padding:60px 32px 80px;align-items:start
+}
+@media(max-width:900px){#scr-start.on{grid-template-columns:1fr;padding:40px 20px 60px}}
+
+.start-left{}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--acc3);border:1px solid rgba(96,165,250,0.3);
+  background:rgba(59,130,246,0.08);
+  padding:6px 14px;border-radius:100px;margin-bottom:24px
+}
+.eyebrow::before{content:'●';font-size:.4rem;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+h1{
+  font-family:var(--sans);font-weight:800;font-size:clamp(2rem,4vw,3.2rem);
+  line-height:1.05;letter-spacing:-1px;margin-bottom:16px;color:var(--t1)
+}
+h1 span{
+  background:linear-gradient(135deg,var(--acc3),#818cf8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.sub-txt{font-size:.95rem;line-height:1.75;color:var(--t2);margin-bottom:36px;max-width:540px}
+
+.kpis{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px}
+.kpi{
+  background:var(--s2);border:1px solid var(--b1);border-radius:var(--r2);
+  padding:16px 20px;text-align:center;min-width:90px;flex:1
+}
+.kpi-n{font-family:var(--sans);font-weight:800;font-size:1.7rem;color:var(--acc3);line-height:1}
+.kpi-l{font-size:.62rem;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+
+/* right panel */
+.start-panel{
+  background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);
+  padding:28px;position:sticky;top:88px
+}
+.panel-title{
+  font-family:var(--sans);font-weight:700;font-size:.75rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--t3);margin-bottom:16px;
+  display:flex;align-items:center;gap:8px
+}
+.panel-title::before{content:'';width:16px;height:1px;background:var(--b2)}
+
+/* topic grid */
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.tc{
+  background:var(--s2);border:1px solid var(--b2);border-radius:var(--r);
+  padding:10px 12px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;gap:8px
+}
+.tc:hover{border-color:var(--acc);background:rgba(59,130,246,0.08)}
+.tc.sel{border-color:var(--acc);background:rgba(59,130,246,0.12)}
+.tc-ico{font-size:1rem;flex-shrink:0}
+.tc-name{font-size:.72rem;font-weight:500;line-height:1.3;color:var(--t2)}
+.tc.sel .tc-name{color:var(--t1)}
+.tc-check{margin-left:auto;width:16px;height:16px;border-radius:4px;border:1.5px solid var(--b3);flex-shrink:0;display:grid;place-items:center;transition:all .15s}
+.tc.sel .tc-check{background:var(--acc);border-color:var(--acc)}
+.tc.sel .tc-check::after{content:'✓';font-size:.6rem;color:#fff;font-weight:700}
+
+.sel-all-row{display:flex;gap:8px;margin-bottom:16px}
+.btn-sm{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;
+  background:var(--s3);border:1px solid var(--b2);border-radius:100px;
+  color:var(--t2);padding:5px 12px;cursor:pointer;transition:all .15s
+}
+.btn-sm:hover{border-color:var(--acc);color:var(--acc3)}
+
+/* quiz length */
+.ql-row{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.ql{
+  background:var(--s2);border:1px solid var(--b2);border-radius:var(--r);
+  padding:8px 16px;cursor:pointer;font-family:var(--sans);font-weight:700;
+  font-size:.8rem;letter-spacing:.5px;transition:all .15s;color:var(--t2);flex:1;text-align:center
+}
+.ql:hover,.ql.sel{border-color:var(--acc);background:rgba(59,130,246,0.12);color:var(--acc3)}
+.ql small{display:block;font-size:.58rem;font-weight:400;color:var(--t3);margin-top:2px;font-family:var(--body)}
+
+/* cta */
+.btn-start{
+  width:100%;background:var(--acc2);border:1px solid var(--acc3);
+  color:#fff;border-radius:var(--r);
+  font-family:var(--sans);font-weight:700;font-size:.9rem;letter-spacing:1px;
+  padding:14px 28px;cursor:pointer;transition:all .2s;text-transform:uppercase;
+  position:relative;overflow:hidden
+}
+.btn-start::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+  opacity:0;transition:opacity .2s
+}
+.btn-start:hover:not(:disabled)::before{opacity:1}
+.btn-start:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(29,78,216,0.4)}
+.btn-start:active{transform:none}
+.btn-start:disabled{opacity:.35;cursor:not-allowed}
+
+.disclaimer{
+  margin-top:20px;font-size:.68rem;color:var(--t4);line-height:1.7;
+  padding-top:16px;border-top:1px solid var(--b1)
+}
+
+/* ── LOADING ── */
+#scr-loading.on{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:70vh;gap:24px;padding:40px 20px
+}
+.spinner-ring{
+  width:72px;height:72px;border-radius:50%;
+  border:2px solid var(--b2);border-top-color:var(--acc);
+  animation:spin 1s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-title{font-family:var(--sans);font-weight:700;font-size:1.2rem;color:var(--t1);text-align:center}
+.load-msg{font-size:.82rem;color:var(--t3);text-align:center;max-width:400px;line-height:1.7}
+.prog-wrap{width:320px;height:4px;background:var(--b1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:0;background:linear-gradient(90deg,var(--acc2),var(--acc3));transition:width .5s ease;border-radius:2px}
+.gen-status{
+  font-family:var(--mono);font-size:.68rem;color:var(--t3);letter-spacing:1px;
+  background:var(--s2);border:1px solid var(--b1);border-radius:var(--r);
+  padding:8px 16px;text-align:center;max-width:380px
+}
+
+/* ── QUIZ SCREEN ── */
+#scr-quiz.on{display:grid;grid-template-columns:240px 1fr;gap:0;min-height:calc(100vh - 66px)}
+@media(max-width:800px){#scr-quiz.on{grid-template-columns:1fr}}
+
+/* sidebar */
+.quiz-sidebar{
+  background:var(--s1);border-right:1px solid var(--b1);
+  padding:20px 16px;position:sticky;top:66px;height:calc(100vh - 66px);
+  overflow-y:auto;display:flex;flex-direction:column;gap:16px
+}
+.quiz-sidebar::-webkit-scrollbar{width:4px}
+.quiz-sidebar::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
+@media(max-width:800px){.quiz-sidebar{display:none}}
+.sb-label{font-family:var(--mono);font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--t4);margin-bottom:8px}
+.qmap{display:flex;flex-wrap:wrap;gap:4px}
+.qd{
+  width:30px;height:30px;border-radius:5px;font-size:.62rem;
+  font-family:var(--mono);font-weight:700;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  background:var(--s2);border:1px solid var(--b2);color:var(--t3);
+  transition:all .12s
+}
+.qd:hover{transform:scale(1.12);border-color:var(--acc)}
+.qd.ans{background:rgba(59,130,246,0.15);border-color:var(--acc2);color:var(--acc3)}
+.qd.cur{background:var(--acc2);border-color:var(--acc3);color:#fff}
+.qd.flag{border-color:var(--warn3);color:var(--warn3)}
+.qd.cor{background:rgba(34,197,94,0.15);border-color:var(--ok2);color:var(--ok3)}
+.qd.wrg{background:rgba(239,68,68,0.15);border-color:var(--err2);color:var(--err3)}
+
+.sb-topic-list{display:flex;flex-direction:column;gap:4px}
+.sb-topic{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 10px;border-radius:var(--r);cursor:pointer;transition:all .12s
+}
+.sb-topic:hover,.sb-topic.act{background:rgba(59,130,246,0.1);color:var(--acc3)}
+.sb-topic-name{font-size:.73rem;color:var(--t2)}
+.sb-topic.act .sb-topic-name{color:var(--acc3)}
+.sb-topic-cnt{font-family:var(--mono);font-size:.6rem;color:var(--t4)}
+
+/* main quiz area */
+.quiz-main{padding:28px 36px 80px;max-width:760px}
+@media(max-width:800px){.quiz-main{padding:20px 16px 80px}}
+
+/* question card */
+.qcard{
+  background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);
+  padding:32px 36px;margin-bottom:16px;
+  animation:fadeUp .25s ease
+}
+@media(max-width:600px){.qcard{padding:20px 16px}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.qmeta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.qnum{font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--acc3)}
+.qsrc-tag{
+  font-family:var(--mono);font-size:.58rem;letter-spacing:1px;text-transform:uppercase;
+  color:var(--t4);background:var(--s2);border:1px solid var(--b1);
+  padding:3px 10px;border-radius:100px
+}
+.qtopic-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.65rem;font-weight:500;color:var(--t3);
+  border:1px solid var(--b1);background:var(--s2);
+  padding:3px 10px;border-radius:100px;margin-bottom:14px
+}
+.qtext{font-size:1rem;line-height:1.8;color:var(--t1);margin-bottom:22px;font-weight:400}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  background:var(--s2);border:1.5px solid var(--b2);border-radius:var(--r);
+  padding:12px 16px;cursor:pointer;transition:all .12s;
+  display:flex;align-items:flex-start;gap:12px;text-align:left;
+  font-size:.9rem;line-height:1.55;color:var(--t2);font-family:var(--body);width:100%
+}
+.opt:hover:not(:disabled){border-color:var(--acc);background:rgba(59,130,246,0.08);color:var(--t1)}
+.opt-key{
+  font-family:var(--mono);font-weight:700;font-size:.7rem;color:var(--acc);
+  min-width:22px;margin-top:1px;letter-spacing:1px;flex-shrink:0
+}
+.opt.sel{border-color:var(--acc);background:rgba(59,130,246,0.1);color:var(--t1)}
+.opt.cor{border-color:var(--ok);background:rgba(34,197,94,0.08);color:var(--ok3)}
+.opt.cor .opt-key{color:var(--ok3)}
+.opt.wrg{border-color:var(--err);background:rgba(239,68,68,0.08);color:var(--err3)}
+.opt.wrg .opt-key{color:var(--err3)}
+.opt:disabled{cursor:default}
+
+.explanation{
+  margin-top:14px;
+  background:rgba(59,130,246,0.04);
+  border:1px solid rgba(59,130,246,0.15);
+  border-left:3px solid var(--acc2);
+  border-radius:0 var(--r) var(--r) 0;
+  padding:14px 18px;font-size:.83rem;line-height:1.75;color:var(--t2);
+  display:none;animation:fadeIn .3s ease
+}
+.explanation.show{display:block}
+.explanation strong{color:var(--acc3);font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* quiz nav */
+.qnav{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:10px;position:sticky;bottom:0;
+  background:rgba(5,8,16,0.95);backdrop-filter:blur(16px);
+  padding:16px 36px;border-top:1px solid var(--b1);
+  margin:0 -36px -80px;z-index:10
+}
+@media(max-width:800px){.qnav{padding:12px 16px;margin:0 -16px -80px}}
+.bnav{
+  background:var(--s2);border:1px solid var(--b2);border-radius:var(--r);
+  color:var(--t2);font-family:var(--mono);font-weight:700;font-size:.7rem;
+  letter-spacing:1px;padding:10px 20px;cursor:pointer;
+  transition:all .12s;text-transform:uppercase
+}
+.bnav:hover:not(:disabled){border-color:var(--acc);color:var(--acc3)}
+.bnav:disabled{opacity:.25;cursor:default}
+.bnav.danger{border-color:rgba(239,68,68,0.3);color:var(--err3)}
+.bnav.danger:hover{background:rgba(239,68,68,0.1)}
+.bnav.primary{
+  background:var(--acc2);border-color:var(--acc3);color:#fff
+}
+.bnav.primary:hover{box-shadow:0 4px 16px rgba(29,78,216,0.4);transform:translateY(-1px)}
+.nav-center{display:flex;gap:8px}
+
+/* progress bar inside quiz */
+.qprog{
+  height:3px;background:var(--b1);border-radius:1.5px;overflow:hidden;margin-bottom:20px
+}
+.qprog-fill{height:100%;background:linear-gradient(90deg,var(--acc2),var(--acc3));transition:width .3s ease;border-radius:1.5px}
+
+/* ── RESULTS ── */
+#scr-results.on{display:block;max-width:900px;margin:0 auto;padding:52px 32px 80px}
+@media(max-width:600px){#scr-results.on{padding:32px 16px 60px}}
+
+.res-hero{text-align:center;margin-bottom:48px}
+.score-ring{
+  width:160px;height:160px;margin:0 auto 24px;
+  border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column
+}
+.score-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+.score-pct{font-family:var(--sans);font-weight:800;font-size:2.5rem;line-height:1}
+.score-lbl{font-family:var(--mono);font-size:.6rem;color:var(--t3);letter-spacing:2px;text-transform:uppercase}
+.res-title{font-family:var(--sans);font-weight:800;font-size:1.8rem;margin-bottom:8px}
+.res-sub{font-size:.9rem;color:var(--t2);max-width:480px;margin:0 auto;line-height:1.65}
+
+.res-kpis{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.rkpi{
+  background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);
+  padding:20px 28px;text-align:center;min-width:130px
+}
+.rkpi-n{font-family:var(--sans);font-weight:800;font-size:2rem;line-height:1}
+.rkpi-n.g{color:var(--ok3)}.rkpi-n.r{color:var(--err3)}.rkpi-n.b{color:var(--acc3)}.rkpi-n.y{color:var(--warn3)}
+.rkpi-l{font-family:var(--mono);font-size:.6rem;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px}
+
+.section-hdr{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--t3);margin-bottom:16px;display:flex;align-items:center;gap:12px
+}
+.section-hdr::after{content:'';flex:1;height:1px;background:var(--b1)}
+
+.domain-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:44px}
+.dcard{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);padding:16px 18px}
+.dcard-name{font-size:.8rem;font-weight:600;color:var(--t2);margin-bottom:10px}
+.dbar-wrap{height:4px;background:var(--b2);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.dbar{height:100%;border-radius:2px;background:var(--acc)}
+.dbar.mid{background:var(--warn2)}.dbar.low{background:var(--err2)}
+.dpct-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;color:var(--t3)}
+
+.rev-card{
+  background:var(--s1);border:1px solid var(--b1);border-radius:var(--r2);
+  padding:22px 26px;margin-bottom:12px
+}
+.rev-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.rev-num{font-family:var(--mono);font-size:.6rem;color:var(--acc3);letter-spacing:2px;text-transform:uppercase}
+.rev-badge{
+  font-family:var(--mono);font-size:.58rem;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 8px;border-radius:100px;background:var(--s2);border:1px solid var(--b1);color:var(--t4)
+}
+.rev-q{font-size:.9rem;line-height:1.65;color:var(--t1);margin-bottom:12px}
+.rev-answers{display:flex;flex-direction:column;gap:6px}
+.rev-a{font-size:.82rem;padding:7px 12px;border-radius:var(--r);display:flex;align-items:flex-start;gap:8px;line-height:1.55}
+.rev-a.wrong{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:var(--err3)}
+.rev-a.corr{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:var(--ok3)}
+.rev-exp{font-size:.78rem;color:var(--t3);line-height:1.65;margin-top:10px;padding-top:10px;border-top:1px solid var(--b1)}
+.rev-exp strong{color:var(--acc3)}
+
+.res-actions{display:flex;gap:12px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+.bact{
+  border-radius:var(--r);font-family:var(--sans);font-weight:700;letter-spacing:.5px;
+  font-size:.85rem;padding:12px 28px;cursor:pointer;transition:all .18s;border:none
+}
+.b-primary{background:var(--acc2);color:#fff;border:1px solid var(--acc3)}
+.b-primary:hover{box-shadow:0 6px 20px rgba(29,78,216,0.4);transform:translateY(-1px)}
+.b-secondary{background:var(--s1);border:1px solid var(--b2);color:var(--t2)}
+.b-secondary:hover{border-color:var(--acc);color:var(--acc3)}
+
+/* toast */
+#toast{
+  position:fixed;bottom:24px;right:24px;
+  background:var(--s2);border:1px solid var(--b2);border-radius:var(--r2);
+  padding:12px 18px;font-family:var(--mono);font-size:.75rem;letter-spacing:.5px;
+  color:var(--t1);z-index:999;transform:translateY(80px);opacity:0;
+  transition:all .3s;pointer-events:none;max-width:300px;line-height:1.5
+}
+#toast.show{transform:none;opacity:1}
+
+/* pass badge */
+.pass-badge{
+  display:inline-block;padding:4px 12px;border-radius:100px;
+  font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;
+  font-weight:700;margin:12px 0
+}
+.pass-badge.ok{background:rgba(34,197,94,0.15);color:var(--ok3);border:1px solid rgba(34,197,94,0.3)}
+.pass-badge.fail{background:rgba(239,68,68,0.15);color:var(--err3);border:1px solid rgba(239,68,68,0.3)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header>
+  <div class="logo">
+     <div>
+      <div class="logo-name">RADIOGRAPHY PROMETRIC</div>
+     </div>
+  </div>
+  <div class="hdr-right">
+    <div class="hpill" id="hpill" style="display:none">Q <em id="hp-c">0</em>/<em id="hp-t">0</em></div>
+    <div id="timer">⏱ <span id="tdis">00:00</span></div>
+  </div>
+</header>
+<div id="pbar-wrap"><div id="pbar"></div></div>
+
+<!-- ══ START ══ -->
+<div id="scr-start" class="scr on">
+  <div class="start-left">
+    <div class="eyebrow">Gulf Prometric Exam Prep 2025</div>
+    <h1>Radiography<br>Technologist<br><span>2000+ Q Bank</span></h1>
+    <p class="sub-txt">The most comprehensive exam preparation platform for DHA, MOH, HAAD, SCFHS, QCHP, OMSB and NHRA radiography licensing exams. Hundreds of hardcoded questions plus unlimited AI-generated content covering every domain.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-n">500+</div><div class="kpi-l">Hardcoded Qs</div></div>
+      <div class="kpi"><div class="kpi-n">1500+</div><div class="kpi-l">AI Generated</div></div>
+      <div class="kpi"><div class="kpi-n">20</div><div class="kpi-l">Topics</div></div>
+      <div class="kpi"><div class="kpi-n">55%</div><div class="kpi-l">Pass Score</div></div>
+    </div>
+    <div style="font-size:.78rem;color:var(--t3);line-height:1.8;padding-top:16px;border-top:1px solid var(--b1);max-width:560px">
+      <strong style="color:var(--t2)">Sources:</strong> ARRT® Content Specifications · Merrill's Atlas of Radiographic Positions · NursingManthra DHA/MOH/HAAD · PrometricMCQ.com · ExamCure DHA Radiographer Bank · Gulf licensing authority exam blueprints · AI questions generated by Claude claude-sonnet-4-20250514
+    </div>
+  </div>
+
+  <div class="start-panel">
+    <div class="panel-title">Select Topics</div>
+    <div class="sel-all-row">
+      <button class="btn-sm" onclick="selAll(true)">Select All</button>
+      <button class="btn-sm" onclick="selAll(false)">Clear All</button>
+    </div>
+    <div class="topic-grid" id="topic-grid"></div>
+
+    <div class="panel-title" style="margin-top:4px">Quiz Length</div>
+    <div class="ql-row">
+      <div class="ql" onclick="setN(25,this)">25<small>Quick</small></div>
+      <div class="ql sel" onclick="setN(50,this)">50<small>Standard</small></div>
+      <div class="ql" onclick="setN(100,this)">100<small>Extended</small></div>
+      <div class="ql" onclick="setN(150,this)">150<small>Full Mock</small></div>
+    </div>
+
+    <button class="btn-start" id="btn-start" onclick="beginQuiz()">▶ START EXAM</button>
+    <div class="disclaimer">AI questions are generated fresh each session using Claude claude-sonnet-4-20250514 trained on Gulf Prometric exam patterns. Questions are for educational preparation only.</div>
+  </div>
+</div>
+
+<!-- ══ LOADING ══ -->
+<div id="scr-loading" class="scr">
+  <div class="spinner-ring"></div>
+  <div class="load-title" id="load-title">Building Your Question Bank</div>
+  <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+  <div class="gen-status" id="gen-status">Initializing...</div>
+  <div class="load-msg">Loading base questions and generating AI-powered questions for your selected topics. This typically takes 15–30 seconds.</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="scr-quiz" class="scr">
+  <div class="quiz-sidebar">
+    <div>
+      <div class="sb-label">Questions</div>
+      <div class="qmap" id="qmap"></div>
+    </div>
+    <div>
+      <div class="sb-label">Topics</div>
+      <div class="sb-topic-list" id="sb-topics"></div>
+    </div>
+  </div>
+  <div class="quiz-main" id="quiz-main">
+    <div class="qprog"><div class="qprog-fill" id="qprog-fill"></div></div>
+    <div id="qarea"></div>
+    <div class="qnav">
+      <button class="bnav" id="bn-prev" onclick="nav(-1)" disabled>← Prev</button>
+      <div class="nav-center">
+        <button class="bnav" onclick="flagQ()">🚩 Flag</button>
+        <button class="bnav" onclick="genMoreQs()">✨ More Qs</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="bnav" id="bn-next" onclick="nav(1)">Next →</button>
+        <button class="bnav primary" onclick="confirmSub()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div id="scr-results" class="scr">
+  <div class="res-hero">
+    <div class="score-ring">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="10"/>
+        <circle id="arc" cx="80" cy="80" r="68" fill="none" stroke="var(--acc3)" stroke-width="10"
+          stroke-linecap="round" stroke-dasharray="427.26" stroke-dashoffset="427.26" style="transition:stroke-dashoffset 1.2s ease"/>
+      </svg>
+      <div class="score-pct" id="rpct">0%</div>
+      <div class="score-lbl">Score</div>
+    </div>
+    <div class="res-title" id="rtitle">—</div>
+    <div class="pass-badge" id="pass-badge"></div>
+    <div class="res-sub" id="rsub">—</div>
+  </div>
+
+  <div class="res-kpis">
+    <div class="rkpi"><div class="rkpi-n g" id="rs-c">0</div><div class="rkpi-l">Correct</div></div>
+    <div class="rkpi"><div class="rkpi-n r" id="rs-w">0</div><div class="rkpi-l">Wrong</div></div>
+    <div class="rkpi"><div class="rkpi-n y" id="rs-s">0</div><div class="rkpi-l">Skipped</div></div>
+    <div class="rkpi"><div class="rkpi-n b" id="rs-t">—</div><div class="rkpi-l">Time</div></div>
+  </div>
+
+  <div class="section-hdr">Performance by Topic</div>
+  <div class="domain-grid" id="domain-grid"></div>
+
+  <div class="section-hdr">Review Incorrect Answers</div>
+  <div id="rev-list"></div>
+
+  <div class="res-actions">
+    <button class="bact b-primary" onclick="restart()">↺ New Exam</button>
+    <button class="bact b-secondary" onclick="scrollTo({top:document.getElementById('rev-list').offsetTop-80,behavior:'smooth'})">📋 Review Mistakes</button>
+    <button class="bact b-secondary" onclick="beginQuiz()">🔄 Same Settings</button>
+  </div>
+</div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// TOPICS
+// ════════════════════════════════════════════════════════
+const TOPICS=[
+  {id:'xray_physics',    name:'X-Ray Physics',         ico:'⚡'},
+  {id:'equipment',       name:'Equipment & QA',         ico:'🔧'},
+  {id:'positioning',     name:'Patient Positioning',    ico:'🧍'},
+  {id:'anatomy',         name:'Anatomy',                ico:'🦴'},
+  {id:'image_quality',   name:'Image Quality',          ico:'🖼️'},
+  {id:'radiation_prot',  name:'Radiation Protection',   ico:'🛡️'},
+  {id:'rad_biology',     name:'Radiation Biology',      ico:'🧬'},
+  {id:'digital_imaging', name:'Digital Imaging CR/DR',  ico:'💾'},
+  {id:'ct',              name:'CT Imaging',             ico:'🌀'},
+  {id:'mri',             name:'MRI Imaging',            ico:'🧲'},
+  {id:'mri_safety',      name:'MRI Safety',             ico:'⚠️'},
+  {id:'fluoroscopy',     name:'Fluoroscopy',            ico:'📡'},
+  {id:'contrast',        name:'Contrast Media',         ico:'💉'},
+  {id:'ultrasound',      name:'Ultrasound',             ico:'🔊'},
+  {id:'nuclear_med',     name:'Nuclear Medicine',       ico:'☢️'},
+  {id:'patient_care',    name:'Patient Care & Ethics',  ico:'🤝'},
+  {id:'infection_ctrl',  name:'Infection Control',      ico:'🦠'},
+  {id:'pediatric',       name:'Pediatric Radiography',  ico:'👶'},
+  {id:'mammography',     name:'Mammography',            ico:'🎀'},
+  {id:'special_proc',    name:'Special Procedures',     ico:'🏥'},
+];
+
+// ════════════════════════════════════════════════════════
+// EXPANDED BASE QUESTION BANK (~500 questions)
+// ════════════════════════════════════════════════════════
+const BASE_QS=[
+// ─── X-RAY PHYSICS (30) ───
+{t:'xray_physics',src:'ARRT',q:"Which phenomenon produces X-rays when fast electrons are suddenly decelerated by the tungsten nucleus?",o:["Compton scatter","Bremsstrahlung radiation","Characteristic radiation","Photoelectric effect"],a:1,r:"Bremsstrahlung ('braking radiation') is produced when electrons decelerate near the tungsten nucleus, releasing energy as X-ray photons with a continuous spectrum."},
+{t:'xray_physics',src:'ARRT',q:"Characteristic radiation is produced when a projectile electron:",o:["Passes through tungsten without interaction","Ejects an inner-shell electron; outer-shell electron fills the vacancy releasing a photon","Is decelerated by the nucleus","Undergoes pair production"],a:1,r:"When a K-shell electron is ejected, an outer-shell electron fills the vacancy releasing energy as a characteristic X-ray at a specific energy unique to tungsten."},
+{t:'xray_physics',src:'ARRT',q:"The maximum energy of X-ray photons produced equals:",o:["The peak voltage applied (kVp) in keV","Half the kVp","Double the kVp","The mAs value"],a:0,r:"At 80 kVp, the maximum photon energy is 80 keV. Most photons have lower energies (polychromatic beam)."},
+{t:'xray_physics',src:'ARRT',q:"The Compton effect involves interaction with which type of electron?",o:["Inner K-shell electron tightly bound","Outer-shell or free electron","Nucleus directly","Positron"],a:1,r:"Compton scatter occurs with outer-shell (loosely bound or free) electrons. The photon transfers partial energy to the electron and continues as a lower-energy scattered photon."},
+{t:'xray_physics',src:'ExamCure DHA',q:"The photoelectric effect predominates at:",o:["High kVp (above 100 kVp)","Low to medium kVp with high atomic number tissues","All kVp levels equally","Only during fluoroscopy"],a:1,r:"Photoelectric effect increases with lower kVp and higher Z (atomic number) material. This is why bone (calcium, Z=20) attenuates more than soft tissue."},
+{t:'xray_physics',src:'ARRT',q:"Which interaction produces the most scatter radiation degrading image contrast in diagnostic radiography?",o:["Photoelectric effect","Compton scatter","Coherent scatter","Pair production"],a:1,r:"Compton scatter is the predominant interaction in soft tissue at diagnostic energies (30–150 keV), generating scattered photons that degrade contrast."},
+{t:'xray_physics',src:'ExamCure DHA',q:"Pair production occurs when photon energy exceeds:",o:["1.022 MeV","0.511 MeV","100 keV","70 keV"],a:0,r:"Pair production requires 1.022 MeV (2 × electron rest mass energy of 0.511 MeV). Not relevant at diagnostic X-ray energies."},
+{t:'xray_physics',src:'ARRT',q:"The half-value layer (HVL) of an X-ray beam is defined as the thickness of material that:",o:["Doubles beam intensity","Reduces beam intensity by half","Completely absorbs the beam","Doubles average photon energy"],a:1,r:"HVL measures beam quality (penetrating power). Higher kVp = greater HVL because the beam is more penetrating."},
+{t:'xray_physics',src:'ARRT',q:"What effect does increasing kVp have on the X-ray beam?",o:["Increases quantity, decreases quality","Decreases both","Increases both quality and quantity","Increases quality only"],a:2,r:"kVp increases photon energy (quality/penetrating power) and also slightly increases quantity of X-rays produced."},
+{t:'xray_physics',src:'MOH',q:"Minimum total filtration required above 70 kVp is:",o:["0.5 mm Al","1.0 mm Al","2.5 mm Al","5.0 mm Al"],a:2,r:"Above 70 kVp, 2.5 mm Al equivalent total filtration is required to remove low-energy photons that contribute to patient dose without image benefit."},
+{t:'xray_physics',src:'ARRT',q:"The energy of characteristic X-rays from tungsten K-shell is approximately:",o:["10–15 keV","58–69 keV","100–110 keV","1–5 keV"],a:1,r:"Tungsten K-characteristic radiation occurs at approximately 58–69 keV (K-alpha ~58 keV, K-beta ~67 keV). These appear as spikes on the X-ray emission spectrum."},
+{t:'xray_physics',src:'DHA',q:"The continuous X-ray spectrum (Bremsstrahlung) has a maximum photon energy equal to:",o:["Average kVp","Peak kVp in keV","Twice the kVp","mAs × kVp"],a:1,r:"Maximum Bremsstrahlung energy = kVp. The spectrum is continuous from near zero to this maximum, with most photons at 1/3 to 1/2 the maximum energy."},
+{t:'xray_physics',src:'ARRT',q:"Which of the following correctly describes coherent (Thomson) scatter?",o:["Photon is completely absorbed","Photon scatters with no energy loss but change of direction","Photon transfers partial energy to outer electron","Positron-electron annihilation occurs"],a:1,r:"Coherent scatter: photon interacts with an atom and is redirected without energy loss. Occurs at low energies (<10 keV); minor contributor to image degradation."},
+{t:'xray_physics',src:'ExamCure DHA',q:"The atomic number of tungsten is:",o:["29","74","56","47"],a:1,r:"Tungsten (W) has atomic number Z=74, making it ideal for X-ray tube anodes due to its high melting point (3422°C) and high atomic number for efficient X-ray production."},
+{t:'xray_physics',src:'MOH',q:"What determines the quality (penetrating power) of an X-ray beam?",o:["mAs","kVp and filtration","Focal spot size","SID"],a:1,r:"Beam quality = energy of photons = determined by kVp and filtration. Filtration removes low-energy photons, shifting the spectrum to higher mean energy."},
+{t:'xray_physics',src:'ARRT',q:"The differential absorption that creates contrast in radiography is primarily due to:",o:["Differences in organ size","Differences in atomic number and density of tissues","Differences in temperature","Differences in blood flow"],a:1,r:"Differential absorption depends on atomic number (Z) and physical density. Bone (high Z calcium) absorbs more than soft tissue; air absorbs almost nothing."},
+{t:'xray_physics',src:'DHA',q:"Approximately what percentage of electron kinetic energy is converted to X-rays in a diagnostic tube?",o:["Less than 1%","10–15%","50%","99%"],a:0,r:"Less than 1% of electron energy becomes X-rays; over 99% is converted to heat. This is why anode cooling is critical."},
+{t:'xray_physics',src:'ExamCure DHA',q:"Which factor controls the quantity (number) of X-ray photons produced?",o:["kVp","mAs","SID","Filtration"],a:1,r:"mAs (milliampere-seconds) = tube current × time. It controls the number of electrons hitting the anode and therefore the quantity of X-ray photons produced."},
+{t:'xray_physics',src:'ARRT',q:"The term 'beam hardening' refers to:",o:["Increased quantity as kVp rises","Preferential absorption of low-energy photons as the beam passes through matter, increasing mean energy","Heating of the X-ray tube anode","Increased grid ratio"],a:1,r:"As the beam passes through matter, low-energy photons are absorbed preferentially (photoelectric effect), leaving a harder (more penetrating) beam with higher mean energy. This causes CT artifacts."},
+{t:'xray_physics',src:'MOH',q:"The Compton interaction probability:",o:["Increases sharply with increasing atomic number","Is relatively independent of atomic number and decreases with increasing photon energy","Doubles at each HVL","Only occurs above 100 keV"],a:1,r:"Compton scatter is nearly independent of Z but decreases as photon energy increases. This is why higher kVp reduces differential absorption and image contrast."},
+{t:'xray_physics',src:'DHA',q:"What is the primary purpose of the beryllium window in mammography X-ray tubes?",o:["Filter high-energy photons","Allow low-energy photons to exit, which would otherwise be absorbed by glass","Increase kVp","Rotate the anode"],a:1,r:"Beryllium (low Z) window transmits very low-energy X-rays (10–30 keV range) needed for mammography. Standard glass windows absorb these photons."},
+{t:'xray_physics',src:'ARRT',q:"The term 'polychromatic' beam means:",o:["All photons have the same energy (monoenergetic)","Photons have a range of energies","Beam contains only gamma rays","Beam is filtered to 2.5mm Al"],a:1,r:"Diagnostic X-ray beams are polychromatic (heterogeneous) — containing photons with a range of energies from near zero to maximum kVp. Only synchrotron sources produce truly monochromatic beams."},
+{t:'xray_physics',src:'ExamCure DHA',q:"At diagnostic X-ray energies (30–150 keV) in soft tissue, the predominant interaction is:",o:["Photoelectric effect","Compton scatter","Pair production","Coherent scatter"],a:1,r:"In soft tissue at diagnostic energies, Compton scatter predominates. Photoelectric effect dominates in bone and at lower kVp values."},
+{t:'xray_physics',src:'MOH',q:"Which of the following is a unit of radiation exposure in air (legacy unit)?",o:["Gray (Gy)","Sievert (Sv)","Roentgen (R)","Becquerel (Bq)"],a:2,r:"The Roentgen (R) measures ionization in air. 1 R ≈ 0.00873 Gy in air. The Gray and Sievert are SI units for absorbed dose and effective dose respectively."},
+{t:'xray_physics',src:'ARRT',q:"The energy of a photon is related to its frequency by:",o:["E = mc²","E = hf (Planck's equation)","E = ½mv²","E = QV"],a:1,r:"E = hf where h = Planck's constant (6.63 × 10⁻³⁴ J·s) and f = frequency. Higher frequency = shorter wavelength = higher energy photon."},
+{t:'xray_physics',src:'DHA',q:"Which shell electrons produce characteristic X-rays most useful in diagnostic imaging?",o:["L-shell","K-shell","M-shell","N-shell"],a:1,r:"K-shell characteristic X-rays have sufficient energy for diagnostic imaging. L-shell characteristic X-rays from tungsten (~8–12 keV) are too low-energy and absorbed as patient dose."},
+{t:'xray_physics',src:'ExamCure DHA',q:"The linear attenuation coefficient (μ) describes:",o:["The rate at which X-rays are produced","The probability of photon interaction per unit thickness of absorber","The dose delivered to the patient","The number of electrons per atom"],a:1,r:"μ (cm⁻¹) = fraction of beam attenuated per unit thickness. Depends on photon energy and absorber composition. Related to HVL by: HVL = 0.693/μ"},
+{t:'xray_physics',src:'MOH',q:"What happens to the X-ray beam as SID (source-image distance) increases?",o:["Intensity increases","Intensity decreases per inverse square law","Energy increases","Energy decreases"],a:1,r:"Per the inverse square law, intensity decreases with the square of distance. Doubling SID reduces intensity to 1/4. Photon energy is unchanged."},
+{t:'xray_physics',src:'ARRT',q:"The filament of the X-ray tube cathode serves what purpose?",o:["Produce X-rays directly","Emit thermionic electrons that are accelerated toward the anode","Filter low-energy photons","Focus the X-ray beam"],a:1,r:"The filament is heated (thermionic emission) releasing electrons from its surface. mA controls filament heating and thus electron emission rate."},
+{t:'xray_physics',src:'DHA',q:"What is the relationship between X-ray wavelength and energy?",o:["Directly proportional — higher energy = longer wavelength","Inversely proportional — higher energy = shorter wavelength","No relationship","Both change independently"],a:1,r:"E = hc/λ: energy and wavelength are inversely proportional. High-energy (high kVp) X-rays have shorter wavelengths and are more penetrating."},
+{t:'xray_physics',src:'ExamCure DHA',q:"The term 'off-focus radiation' in X-ray production refers to:",o:["Scatter from the patient","X-rays produced at the anode outside the focal spot area","Radiation from the collimator","Secondary radiation from the grid"],a:1,r:"Off-focus (extrafocal) radiation is produced when electrons bounce off the focal spot and strike other parts of the anode. It contributes to image unsharpness and can be reduced by collimation."},
+
+// ─── EQUIPMENT & QA (30) ───
+{t:'equipment',src:'ExamCure DHA',q:"The rotating anode in an X-ray tube serves what primary purpose?",o:["Increase photon energy","Spread heat over a larger track area allowing higher mAs","Produce characteristic radiation","Filter low-energy photons"],a:1,r:"The rotating anode distributes heat over a much larger area (the anode disk track), preventing melting and allowing higher mA values."},
+{t:'equipment',src:'ExamCure DHA',q:"The focal spot size affects which image quality characteristic?",o:["Radiographic density","Radiographic contrast","Spatial resolution (sharpness)","Long scale contrast"],a:2,r:"Smaller focal spot = less geometric unsharpness (penumbra) = greater spatial resolution. Larger focal spots handle more heat but reduce sharpness."},
+{t:'equipment',src:'ExamCure DHA',q:"Automatic Exposure Control (AEC) terminates exposure when:",o:["Timer runs out","Preset radiation reaches the detector behind the patient","mAs reaches maximum","kVp drops below threshold"],a:1,r:"AEC (phototimer) uses ionization chambers to measure radiation reaching the IR and automatically stops when sufficient exposure is achieved."},
+{t:'equipment',src:'ExamCure DHA',q:"A grid is used in radiography to:",o:["Increase kVp","Remove scatter before it reaches the image receptor, improving contrast","Reduce motion blur","Protect the patient's gonads"],a:1,r:"Grids have alternating lead strips and interspacing material that absorb angled scatter photons while allowing primary beam photons to pass through."},
+{t:'equipment',src:'ExamCure DHA',q:"Grid ratio is defined as:",o:["Width of lead strips ÷ width of interspaces","Height of lead strips ÷ width of interspaces","Total lead strips per cm","Angle of lead strips"],a:1,r:"Grid ratio = h/D. Higher ratio (e.g., 16:1) removes more scatter but requires precise centering. Common ratios: 8:1, 12:1."},
+{t:'equipment',src:'ARRT',q:"Grid cutoff with a focused grid is caused by:",o:["Too high kVp","Improper lateral centering","Too large a focal spot","Incorrect mAs"],a:1,r:"Focused grids have angled strips for a specific focal range. Lateral decentering misaligns strips with the diverging beam, causing cutoff (reduced density)."},
+{t:'equipment',src:'ARRT',q:"The Bucky mechanism (Potter-Bucky diaphragm) purpose is:",o:["Collimate the X-ray beam","Move the grid during exposure to eliminate grid lines from the image","Measure patient dose","Position the patient"],a:1,r:"The Bucky mechanism oscillates the grid during exposure, blurring grid line shadows while maintaining scatter-removal function."},
+{t:'equipment',src:'ExamCure DHA',q:"The anode heel effect describes:",o:["Anode wear causing beam reduction","Greater beam intensity on cathode side and less on anode side","Anode rotating at different speeds","Focal spot migration during exposure"],a:1,r:"The angled anode absorbs photons on the anode side. Cathode side has ~15–25% more intensity. Place thicker anatomy toward the cathode."},
+{t:'equipment',src:'ExamCure DHA',q:"A fluoroscopic image intensifier converts X-rays primarily through which component?",o:["Input phosphor screen (cesium iodide)","Photocathode","Electron lenses","Output phosphor"],a:0,r:"The input phosphor (CsI) converts X-rays to visible light. The photocathode then converts light to electrons, which are accelerated to the output phosphor."},
+{t:'equipment',src:'ARRT',q:"The spin top test verifies:",o:["Focal spot size","Timer accuracy","Grid alignment","Screen-film contact"],a:1,r:"Spin top test: spinning top produces dots or arcs during exposure. Count dots (single-phase) or measure arc angle to verify timer accuracy."},
+{t:'equipment',src:'DHA',q:"The image quality factor most affected by grid use is:",o:["Density (brightness)","Contrast (improved)","Spatial resolution","Noise"],a:1,r:"Grids primarily improve contrast by removing scatter. They require increased mAs to compensate for primary beam absorption by the grid (Bucky factor)."},
+{t:'equipment',src:'ExamCure DHA',q:"What is the 'Bucky factor' (grid factor)?",o:["The number of lines per cm in a grid","The amount by which mAs must be increased to compensate for primary beam absorption by the grid","The ratio of grid lines to interspacing","The focal spot size"],a:1,r:"Bucky factor = mAs with grid ÷ mAs without grid. Typical values: 8:1 grid ≈ 4; 12:1 grid ≈ 5; 16:1 grid ≈ 6."},
+{t:'equipment',src:'MOH',q:"Which type of grid has lead strips all parallel to each other?",o:["Focused grid","Linear grid (parallel)","Crossed grid","Rhombic grid"],a:1,r:"Parallel (linear) grids have parallel lead strips. They produce cutoff at the image edges when used with diverging beams but can be used at any SID."},
+{t:'equipment',src:'ARRT',q:"The effective focal spot (vs. actual focal spot) is produced by:",o:["Filtration","Line focus principle — angling the anode target","Collimation","Grid use"],a:1,r:"The anode is angled (~10–17°). The actual focal spot is larger (a rectangle on the anode), but the effective focal spot projected toward the patient is smaller, improving sharpness."},
+{t:'equipment',src:'DHA',q:"What test checks if the X-ray beam is aligned with the center of the image receptor?",o:["Star pattern test","Beam alignment test (collimator accuracy)","Spinning top test","Wire mesh test"],a:1,r:"Beam alignment/collimator accuracy test checks that the light/X-ray field are coincident and centered. The light field must agree with the radiation field within 2% of SID."},
+{t:'equipment',src:'ExamCure DHA',q:"A fluoroscopy unit dose rate limit for normal mode operation is typically:",o:["2 mGy/min","88 mGy/min air kerma rate (10 R/min)","500 mGy/min","0.1 mGy/min"],a:1,r:"Standard fluoroscopy units are limited to approximately 88 mGy/min (10 R/min) air kerma rate in normal mode. High-dose mode can exceed this with operator activation."},
+{t:'equipment',src:'ARRT',q:"The kVp accuracy test in QC uses which device?",o:["Densitometer","Non-invasive kVp meter (digital kVp meter)","Dosimeter","Sensitometer"],a:1,r:"Non-invasive kVp meters measure the actual kVp output of the X-ray tube without inserting probes into the circuit. Required annually in QC programs."},
+{t:'equipment',src:'DHA',q:"Half-value layer (HVL) measurement requires which instrument?",o:["Sensitometer","Ionization chamber dosimeter and aluminum attenuators","Film densitometer","Spinning top"],a:1,r:"HVL is measured by placing increasing thicknesses of aluminum between the tube and an ionization chamber, recording when dose rate drops to 50%."},
+{t:'equipment',src:'ExamCure DHA',q:"What does AEC detector placement (cell selection) affect?",o:["kVp selected","Which part of the anatomy determines exposure termination","Timer maximum","Grid ratio"],a:1,r:"AEC cell selection determines which anatomical area controls the exposure. For chest PA, center cell (mediastinum) or lateral cells (lung) may be selected depending on the clinical indication."},
+{t:'equipment',src:'MOH',q:"Screen-film contact is tested using:",o:["Wire mesh test pattern","Star resolution pattern","Spinning top","HVL measurement"],a:0,r:"A wire mesh test object placed on the cassette and exposed reveals poor screen-film contact as areas of blurring in the resulting image."},
+{t:'equipment',src:'ARRT',q:"The purpose of collimation includes all of the following EXCEPT:",o:["Reduce patient dose","Improve image contrast","Increase image brightness","Limit scatter production"],a:2,r:"Collimation reduces dose and scatter (improving contrast) but does not itself increase image brightness. Brightness is controlled by mAs and kVp."},
+{t:'equipment',src:'DHA',q:"What is the purpose of inherent filtration in an X-ray tube?",o:["Remove high-energy photons","Remove low-energy photons that contribute to dose without imaging value (from glass envelope, oil, window)","Increase kVp","Rotate the anode"],a:1,r:"Inherent filtration (~0.5 mm Al equiv.) comes from the glass/metal tube envelope, insulating oil, and beryllium window. Combined with added filtration = total filtration."},
+{t:'equipment',src:'ExamCure DHA',q:"Resolution in screen-film systems is measured in:",o:["Hounsfield units","Line pairs per millimeter (lp/mm)","Gray values","mAs"],a:1,r:"Spatial resolution is measured as line pairs per millimeter (lp/mm). Screen-film: 8–15 lp/mm. CR: 2.5–5 lp/mm. DR: 3.5–7 lp/mm. CT: 0.5–1.5 lp/mm."},
+{t:'equipment',src:'MOH',q:"What is the purpose of the photomultiplier tube (PMT) in a CR reader?",o:["Emit laser light","Detect and amplify the light emitted from the stimulated phosphor plate","Store the latent image","Collimate the laser beam"],a:1,r:"The PMT detects the very faint light emitted by the PSP plate when stimulated by the laser, amplifies this signal (photomultiplication), and converts it to an electrical current for digitization."},
+{t:'equipment',src:'ARRT',q:"A sensitometer is used in QC to:",o:["Measure X-ray output","Expose film to a standardized series of light exposures for processor QC","Measure developer temperature","Test grid alignment"],a:1,r:"A sensitometer exposes film strips to standardized light densities (optical steps). The processed film is read with a densitometer to monitor film processor consistency (speed, contrast, fog)."},
+{t:'equipment',src:'DHA',q:"What does the term 'signal-to-noise ratio (SNR)' mean in digital imaging?",o:["Ratio of kVp to mAs","Ratio of useful image signal to random noise; higher SNR = better image quality","Ratio of grid lines to interspacing","Ratio of SID to OID"],a:1,r:"Higher SNR = better image quality with less quantum mottle. SNR improves with more photons (higher mAs). SNR ∝ √(number of photons)."},
+{t:'equipment',src:'ExamCure DHA',q:"The maximum tube current (mA) is limited by:",o:["kVp maximum","Anode heat capacity and focal spot size","SID","Grid ratio"],a:1,r:"Maximum mA is limited by: (1) anode heat capacity (risk of melting), and (2) focal spot size (smaller spot = lower mA limit). Rotating anodes allow higher mA than stationary ones."},
+{t:'equipment',src:'MOH',q:"What is the purpose of the dead-man type exposure switch in fluoroscopy?",o:["Start continuous fluoroscopy","Require continuous operator activation — exposure stops immediately when switch is released","Lock the table","Control kVp"],a:1,r:"Dead-man switch requires the operator to hold it continuously to maintain fluoroscopy. When released, exposure immediately stops, preventing inadvertent prolonged exposure."},
+{t:'equipment',src:'ARRT',q:"Quantum detection efficiency (QDE or DQE) in digital detectors measures:",o:["Maximum output voltage","How efficiently the detector converts incident X-ray photons into useful signal","Amount of scatter produced","Grid efficiency"],a:1,r:"DQE (Detective Quantum Efficiency) is a measure of how efficiently a detector uses X-ray photons to produce a signal relative to an ideal detector. Higher DQE = better dose efficiency."},
+{t:'equipment',src:'DHA',q:"Image lag in digital fluoroscopy refers to:",o:["Delay in image transmission to PACS","Persistence of a previous frame in subsequent frames, causing ghosting in moving images","Increased noise at low dose rates","Image distortion at image edges"],a:1,r:"Image lag (ghosting) is residual signal from a previous frame appearing in subsequent frames. It is a detector characteristic that can degrade dynamic imaging quality."},
+
+// ─── POSITIONING (30) ───
+{t:'positioning',src:"Merrill's",q:"Standard SID for PA chest radiograph is:",o:["72 inches (183 cm)","40 inches (102 cm)","48 inches (122 cm)","60 inches (152 cm)"],a:0,r:"72 inches minimizes cardiac magnification, providing accurate assessment of heart size and shape."},
+{t:'positioning',src:"Merrill's",q:"The Caldwell method (PA axial skull) CR angle is:",o:["0 degrees perpendicular","15 degrees caudad","15 degrees cephalad","25 degrees caudad"],a:1,r:"Caldwell: 15° caudad, exits at nasion. Projects petrous ridges into lower 1/3 of orbits, showing frontal bone and ethmoid sinuses."},
+{t:'positioning',src:"Merrill's",q:"The Towne (AP axial) method CR angle is:",o:["15 degrees caudad","30–35 degrees caudad","15 degrees cephalad","25 degrees cephalad"],a:1,r:"Towne: 30–35° caudad (37° if using IOML). Demonstrates occipital bone, foramen magnum, and dorsum sellae."},
+{t:'positioning',src:"Merrill's",q:"For the Waters view (parietoacanthial), the OML forms what angle with the IR?",o:["0 degrees","37 degrees","45 degrees","90 degrees"],a:1,r:"Waters: OML 37° to IR. Projects petrous ridges below maxillary sinuses for unobstructed facial bone imaging."},
+{t:'positioning',src:"Merrill's",q:"For a true lateral elbow, the patient position is:",o:["Supine with arm extended","Seated at end of table with elbow flexed 90° and all parts in same plane","Standing with arm at side","Prone with arm above head"],a:1,r:"True lateral elbow: elbow flexed 90°, humerus, elbow, and forearm all resting in the same horizontal plane on the IR."},
+{t:'positioning',src:"Merrill's",q:"Which special view best demonstrates the patellofemoral joint space?",o:["AP knee","Lateral knee","Sunrise/Skyline projection","Tunnel (intercondylar) view"],a:2,r:"Sunrise/Skyline/Merchant view (axial projection) demonstrates the patellofemoral joint for patellar subluxation, chondromalacia, and arthritis."},
+{t:'positioning',src:"Merrill's",q:"For the AP pelvis, feet are internally rotated ~15° to:",o:["Show the lesser trochanter in profile","Place femoral necks parallel to IR, showing them without foreshortening","Externally rotate the hip","Reduce patient dose"],a:1,r:"Natural femoral neck anteversion foreshortens necks in neutral position. 15° internal rotation corrects this for true AP view of femoral necks."},
+{t:'positioning',src:"Merrill's",q:"For lateral lumbar spine, CR is centered at:",o:["Umbilicus","Iliac crest level (L3–L4)","Xiphoid process","ASIS"],a:1,r:"CR at iliac crest (approximately L3–L4) to include all lumbar vertebrae and SI joints."},
+{t:'positioning',src:"Merrill's",q:"The LPO position demonstrates which sacroiliac joint?",o:["Right SI joint","Left SI joint (same side as the oblique)","Both SI joints","Neither"],a:1,r:"For SI joints: LPO = LEFT SI joint; RPO = RIGHT SI joint (same side)."},
+{t:'positioning',src:"Merrill's",q:"For AP shoulder in external rotation, which structure is demonstrated in profile?",o:["Lesser tubercle","Greater tubercle laterally","Coracoid process","Glenoid fossa"],a:1,r:"External rotation: greater tubercle in lateral profile. Used for detecting calcific tendinitis and greater tubercle fractures."},
+{t:'positioning',src:"Merrill's",q:"Standard SID for routine extremity radiography is:",o:["72 inches","40 inches (100 cm)","48 inches","60 inches"],a:1,r:"40 inches (100 cm) is standard for extremity radiography. This provides acceptable sharpness while being practical for table-top positioning."},
+{t:'positioning',src:"Merrill's",q:"For an AP projection of the foot, the CR is directed:",o:["Perpendicular to the IR","10 degrees posteriorly (toward the heel)","30 degrees cephalad","15 degrees toward toes"],a:1,r:"For AP foot: CR angled 10° posterior (toward heel) to be perpendicular to the long axis of the metatarsals, reducing foreshortening."},
+{t:'positioning',src:"Merrill's",q:"The Harris-Beath (axial calcaneus) projection demonstrates:",o:["The ankle mortise","The subtalar joints and calcaneus in profile","Achilles tendon insertion","The cuboid and navicular"],a:1,r:"Axial (plantodorsal) calcaneus: patient in supine or seated with foot dorsiflexed 90°, CR angled 40° cephalad through calcaneus. Shows calcaneal fractures and subtalar joints."},
+{t:'positioning',src:"Merrill's",q:"For the PA oblique hand (Nørgaard/ball-catcher position), the hand is:",o:["Full supination","Full pronation","45° supination","Full lateral"],a:2,r:"Nørgaard: both hands in 45° supination (ball-catcher position). Demonstrates early erosive changes in rheumatoid arthritis at metacarpal heads."},
+{t:'positioning',src:"Merrill's",q:"For a lateral skull, which structures should be superimposed?",o:["The two orbits","Orbital roofs (planum sphenoidale) and sella turcica","Both mandibular condyles and orbital roofs","All of the above"],a:3,r:"True lateral skull: superimpose orbital roofs, sella turcica, mandibular condyles, and external auditory meati."},
+{t:'positioning',src:"Merrill's",q:"The Stener-Gerde-Stenderup (SGS) / Scotty dog view of the lumbar spine is which projection?",o:["AP lumbar","Lateral lumbar","Posterior oblique lumbar (45°)","Axial lumbar"],a:2,r:"Posterior oblique lumbar (45°): the 'Scotty dog' silhouette is formed by the pedicle (eye), transverse process (nose), superior articular process (ear), inferior articular process (leg). Shows pars interarticularis."},
+{t:'positioning',src:"Merrill's",q:"For a PA chest radiograph, the patient's chin is:",o:["Resting on the IR","Raised and resting on top of the IR","Turned to one side","Positioned at a 45° angle"],a:1,r:"PA chest: chin raised and resting on top of the IR to keep neck out of the image and allow full lung apex visualization."},
+{t:'positioning',src:"Merrill's",q:"For a cross-table lateral (horizontal beam lateral) of the hip, the IR is placed:",o:["Under the patient","Perpendicular to the floor against the lateral aspect of the affected hip","Against the medial hip","Under the lumbar spine"],a:1,r:"Cross-table lateral hip: IR placed vertically against the lateral aspect of the affected hip, perpendicular to the floor. The unaffected leg is elevated. Useful for trauma patients who cannot stand."},
+{t:'positioning',src:"Merrill's",q:"Which oblique position of the chest best demonstrates the left lung?",o:["LAO (left anterior oblique)","RAO (right anterior oblique)","LPO","RLPO"],a:0,r:"LAO (left anterior oblique): patient rotated 45–60°, left shoulder forward. Best demonstrates left lung, left heart border, and descending aorta."},
+{t:'positioning',src:"Merrill's",q:"For the AP axial clavicle projection, the CR is directed:",o:["Perpendicular to the IR","15–30 degrees cephalad","30 degrees caudad","45 degrees caudad"],a:1,r:"AP axial clavicle: CR 15–30° cephalad to project the clavicle above the rib cage and lung apex for better visualization."},
+{t:'positioning',src:"Merrill's",q:"The scaphoid (AP oblique wrist) view uses which CR angle?",o:["20 degrees cephalad","20 degrees ulnar deviation and CR perpendicular","45 degrees caudad","Lateral beam"],a:1,r:"For the scaphoid: ulnar deviation shifts the scaphoid out of overlap, and a 20° cephalad angle shows the scaphoid waist without foreshortening (full scaphoid view)."},
+{t:'positioning',src:"Merrill's",q:"For the ERECT left lateral decubitus chest projection, the patient is:",o:["Erect facing the tube","Lying on the left side with horizontal beam — demonstrates right pleural fluid or free air on the right","Lying on the right side","Prone"],a:1,r:"Left lateral decubitus: patient on left side (dependent), horizontal beam. Demonstrates free air on the right (non-dependent) side or confirms right pleural effusion (layers on dependent side)."},
+{t:'positioning',src:"Merrill's",q:"For the SMV (submentovertex) skull projection, the CR is directed:",o:["Perpendicular to the IR","Perpendicular to the IOML (baseline nearly parallel to IR)","30 degrees caudad","15 degrees cephalad"],a:1,r:"SMV: chin elevated until IOML is nearly parallel to IR; CR directed perpendicular to IOML. Demonstrates the base of the skull, zygomatic arches, and mandibular condyles."},
+{t:'positioning',src:"Merrill's",q:"For an AP axial shoulder (Grashey method), the goal is to demonstrate:",o:["Acromioclavicular joint","Greater tubercle in profile","Glenohumeral joint space without superimposition","Coracoid process"],a:2,r:"Grashey method: patient rotated 35–45° toward affected side, CR perpendicular or slightly angled. Projects the glenoid fossa in profile, showing the glenohumeral joint space."},
+{t:'positioning',src:"Merrill's",q:"For erect lateral cervical spine, the CR is centered at which level?",o:["C1","C4","C7–T1 junction","T2"],a:1,r:"Lateral cervical spine: CR at C4 level (approximately the thyroid cartilage). This centers the image on the mid-cervical spine."},
+{t:'positioning',src:"Merrill's",q:"The odontoid process (dens) is best demonstrated by which projection?",o:["AP lower cervical","Open-mouth AP (Fuchs method)","Lateral cervical","Swimmer's lateral"],a:1,r:"Open-mouth AP: mouth wide open, CR perpendicular through open mouth. Projects the dens of C2 and the lateral masses of C1 through the open mouth without superimposition."},
+{t:'positioning',src:"Merrill's",q:"For a lateral projection of the thoracic spine, inspiration or expiration is used?",o:["Suspended inspiration","Suspended expiration","Full inspiration then breathe slowly (breathing technique)","Doesn't matter"],a:2,r:"Breathing technique (slow, shallow breathing during exposure) blurs overlying ribs, improving visualization of thoracic vertebrae. Alternatively, suspended full expiration."},
+{t:'positioning',src:"Merrill's",q:"For the Trendelenburg position, the patient is:",o:["Lying flat supine","Supine with head lower than feet","Supine with feet lower than head (reverse)","Lateral decubitus"],a:1,r:"Trendelenburg: supine, head-down tilt. Used to increase venous return, shift pelvic organs superiorly for surgery, and is sometimes used in trauma management."},
+{t:'positioning',src:"Merrill's",q:"The trauma oblique (modified lateral) of the elbow is used when:",o:["Patient cannot extend the elbow","Patient has a prosthesis","Patient is pediatric","Standard AP is not possible"],a:0,r:"Trauma oblique (Jones method): when elbow cannot be extended (fracture/dislocation), AP and lateral modified views are obtained with the elbow in the fixed (flexed) position."},
+{t:'positioning',src:"Merrill's",q:"For a frog-leg lateral pelvis/hip (Lauenstein method), the patient:",o:["Lies prone with legs extended","Lies supine, hips and knees flexed and externally rotated symmetrically (frog-leg position)","Sits erect","Is in decubitus position"],a:1,r:"Lauenstein frog-leg: supine, both hips and knees flexed ~45° and externally rotated symmetrically. Both hip joints are demonstrated simultaneously; useful for children (Perthes disease)."},
+
+// ─── ANATOMY (25) ───
+{t:'anatomy',src:'ARRT',q:"The liver is primarily located in which abdominal quadrant?",o:["Left upper quadrant","Right upper quadrant","Right lower quadrant","Left lower quadrant"],a:1,r:"Liver occupies the RUQ and extends into the LUQ. It is the largest solid organ, weighing ~1.5 kg."},
+{t:'anatomy',src:'ARRT',q:"How many thoracic vertebrae are there?",o:["5","7","12","14"],a:2,r:"12 thoracic vertebrae (T1–T12), each articulating with a pair of ribs. Identified by costal demifacets."},
+{t:'anatomy',src:'ARRT',q:"The carina (tracheal bifurcation) is at which vertebral level?",o:["T2","T4–T5","T6","T8"],a:1,r:"Carina at T4–T5 (angle of Louis/sternal angle). Widening >70° suggests left atrial enlargement."},
+{t:'anatomy',src:'ARRT',q:"The appendix attaches to the:",o:["Sigmoid colon","Ileum","Cecum","Descending colon"],a:2,r:"Appendix attaches to the posteromedial cecum ~2 cm below the ileocecal valve. Appendicitis causes RLQ pain (McBurney's point)."},
+{t:'anatomy',src:'ARRT',q:"Which bone contains the sella turcica?",o:["Frontal","Temporal","Sphenoid","Ethmoid"],a:2,r:"Sella turcica ('Turkish saddle') is in the sphenoid body, housing the pituitary gland. Enlarged in pituitary adenoma."},
+{t:'anatomy',src:'ARRT',q:"The patella is the largest example of which bone type?",o:["Long bone","Short bone","Flat bone","Sesamoid bone"],a:3,r:"Patella is the largest sesamoid bone, developing within the quadriceps tendon."},
+{t:'anatomy',src:'ARRT',q:"The acetabulum is formed by fusion of:",o:["Ilium, ischium, pubis","Ilium, femur, pubis","Sacrum, ilium, ischium","Pubis, femur, ischium"],a:0,r:"Acetabulum formed by ilium (superior), ischium (posterior-inferior), pubis (anterior-inferior) at the triradiate cartilage."},
+{t:'anatomy',src:'ARRT',q:"The most frequently fractured carpal bone is:",o:["Lunate","Hamate","Scaphoid","Triquetrum"],a:2,r:"Scaphoid: 70% of carpal fractures, from FOOSH. Precarious blood supply risks avascular necrosis."},
+{t:'anatomy',src:'ARRT',q:"How many bones are in the adult wrist (carpals)?",o:["6","7","8","10"],a:2,r:"8 carpals: Proximal row (lateral to medial): Scaphoid, Lunate, Triquetrum, Pisiform. Distal row: Trapezium, Trapezoid, Capitate, Hamate."},
+{t:'anatomy',src:'ARRT',q:"The diaphragm separates which two cavities?",o:["Thoracic and pelvic","Thoracic and abdominal","Abdominal and pelvic","Cranial and thoracic"],a:1,r:"Diaphragm separates thoracic (above) and abdominal (below) cavities. Primary muscle of inspiration. Right hemidiaphragm normally higher."},
+{t:'anatomy',src:'ARRT',q:"Which structure is located in the middle mediastinum?",o:["Thymus","Esophagus","Heart and pericardium","Thoracic duct"],a:2,r:"Middle mediastinum: heart, pericardium, ascending aorta, pulmonary trunk. Anterior = thymus. Posterior = esophagus, thoracic duct."},
+{t:'anatomy',src:'ARRT',q:"The cribriform plate of which bone forms the floor of the anterior cranial fossa?",o:["Frontal bone","Sphenoid bone","Ethmoid bone","Temporal bone"],a:2,r:"Ethmoid cribriform plate: floor of anterior cranial fossa and roof of nasal cavity. CN I (olfactory nerves) pass through its perforations."},
+{t:'anatomy',src:'ARRT',q:"The knee joint is classified as which type?",o:["Ball and socket","Pivot","Modified hinge (bicondylar)","Gliding"],a:2,r:"Knee is a modified hinge joint with three articulations: medial tibiofemoral, lateral tibiofemoral, and patellofemoral. Largest joint in the body."},
+{t:'anatomy',src:'ARRT',q:"The common bile duct is formed by the junction of:",o:["Cystic duct and right hepatic duct","Common hepatic duct and cystic duct","Pancreatic duct and hepatic duct","Left and right hepatic ducts only"],a:1,r:"Common bile duct = common hepatic duct + cystic duct. It joins the pancreatic duct at the ampulla of Vater (hepatopancreatic ampulla) before entering the duodenum."},
+{t:'anatomy',src:'ARRT',q:"How many lumbar vertebrae are there?",o:["4","5","6","7"],a:1,r:"5 lumbar vertebrae (L1–L5). Largest vertebrae with massive bodies for weight bearing. No rib articulations or transverse foramina."},
+{t:'anatomy',src:'ARRT',q:"The brachial plexus originates from spinal nerve roots:",o:["C1–C4","C5–T1","T1–T5","C3–C8"],a:1,r:"Brachial plexus: C5–T1. Supplies the upper limb. Injury (e.g., from shoulder dystocia) causes Erb's palsy (C5–C6) or Klumpke's palsy (C8–T1)."},
+{t:'anatomy',src:'DHA',q:"The portal vein is formed by the junction of:",o:["Superior mesenteric vein and inferior mesenteric vein","Superior mesenteric vein and splenic vein","Splenic vein and renal vein","Hepatic veins"],a:1,r:"Portal vein = superior mesenteric vein + splenic vein (the inferior mesenteric vein joins the splenic vein). It carries nutrient-rich blood from the gut to the liver."},
+{t:'anatomy',src:'ARRT',q:"The adrenal (suprarenal) glands are located:",o:["Below the kidneys","Superior to each kidney","Posterior to the pancreas","Lateral to the spleen"],a:1,r:"Adrenal glands sit on the superior pole of each kidney. Right adrenal is pyramidal; left is semilunar (crescent-shaped)."},
+{t:'anatomy',src:'ARRT',q:"The pisiform bone is a sesamoid bone found within the tendon of which muscle?",o:["Flexor digitorum superficialis","Flexor carpi ulnaris","Flexor carpi radialis","Abductor pollicis longus"],a:1,r:"Pisiform = sesamoid within flexor carpi ulnaris tendon. It is the only carpal bone with a single articular surface (proximal row, ulnar side)."},
+{t:'anatomy',src:'DHA',q:"Which of the following is NOT a branch of the celiac trunk?",o:["Left gastric artery","Common hepatic artery","Splenic artery","Superior mesenteric artery"],a:3,r:"Celiac trunk branches: left gastric, common hepatic, and splenic arteries. Superior mesenteric artery is a separate branch of the abdominal aorta."},
+{t:'anatomy',src:'ARRT',q:"The foramen of Winslow (epiploic foramen) connects:",o:["Pleural cavities","Lesser sac (omental bursa) to the greater peritoneal sac","Peritoneal cavity to the retroperitoneum","Bladder to the ureter"],a:1,r:"Foramen of Winslow: communication between the greater sac and the lesser sac (omental bursa), posterior to the hepatoduodenal ligament."},
+{t:'anatomy',src:'MOH',q:"Vertebral levels of major structures: the coeliac trunk arises at approximately:",o:["T12","L1","L2–L3","L4"],a:1,r:"Coeliac trunk: L1. Superior mesenteric artery: L1–L2. Inferior mesenteric artery: L3. Renal arteries: L1–L2. Aortic bifurcation: L4."},
+{t:'anatomy',src:'ARRT',q:"The thoracic duct (main lymphatic duct) drains lymph from:",o:["Only the right chest","The entire body except the right chest, right arm, and right head and neck","Only abdominal organs","Only lower limbs"],a:1,r:"Thoracic duct collects ~75% of total lymph. The right lymphatic duct drains the right chest, right arm, right head and neck."},
+{t:'anatomy',src:'DHA',q:"Which vertebral level corresponds to the level of the sternal angle (angle of Louis)?",o:["T2","T4","T6","L1"],a:1,r:"Sternal angle (angle of Louis): junction of manubrium and body of sternum, at T4–T5. Also at the level of the carina and second costal cartilage."},
+{t:'anatomy',src:'ARRT',q:"The femoral triangle boundaries are:",o:["Inguinal ligament (superior), sartorius (lateral), adductor longus (medial)","ASIS, pubic tubercle, and greater trochanter","Rectus femoris, gracilis, and iliopsoas","Inguinal ligament, femoral nerve, and fascia lata"],a:0,r:"Femoral triangle: Superior = inguinal ligament; Lateral = sartorius; Medial = adductor longus. Contains femoral nerve, artery, vein, and lymph nodes (NAVEL lateral to medial)."},
+
+// ─── IMAGE QUALITY (20) ───
+{t:'image_quality',src:'ARRT',q:"Radiographic density (brightness in digital) is primarily controlled by:",o:["kVp","mAs","SID","Grid ratio"],a:1,r:"mAs controls quantity of X-ray photons — primary controller of radiographic density/brightness. Doubling mAs doubles density."},
+{t:'image_quality',src:'ARRT',q:"Radiographic contrast is primarily controlled by:",o:["mAs","SID","kVp","Focal spot size"],a:2,r:"kVp controls differential absorption between tissues. Lower kVp = higher contrast (short scale); Higher kVp = lower contrast (long scale)."},
+{t:'image_quality',src:'ARRT',q:"The inverse square law states intensity is inversely proportional to:",o:["Distance","Square of the distance","Cube of the distance","Square root of distance"],a:1,r:"I₁/I₂ = D₂²/D₁². Doubling distance = intensity reduced to 1/4."},
+{t:'image_quality',src:'ARRT',q:"To maintain density when SID doubles from 40 to 80 inches, mAs must be:",o:["Doubled","Halved","Quadrupled","Same"],a:2,r:"mAs new = old × (new SID/old SID)² = original × (80/40)² = original × 4. Quadruple mAs."},
+{t:'image_quality',src:'ARRT',q:"Quantum mottle (noise) on a digital radiograph is caused by:",o:["Too high mAs","Too low mAs — insufficient photons","Motion blur","Grid lines"],a:1,r:"Quantum mottle = statistical variation in photon detection when too few photons reach the detector. Increase mAs to reduce noise."},
+{t:'image_quality',src:'ARRT',q:"The 15% kVp rule states that increasing kVp by 15% requires mAs to be:",o:["Doubled","Quadrupled","Halved","Same"],a:2,r:"15% kVp increase ≈ doubles beam effectiveness. To maintain density with the same patient, halve the mAs (reducing patient dose by ~50%)."},
+{t:'image_quality',src:'ARRT',q:"Penumbra (geometric unsharpness) is greatest when:",o:["Focal spot small, OID small, SID large","Focal spot large, OID large, SID small","Focal spot small, SID small","Focal spot large, SID large"],a:1,r:"Penumbra = focal spot size × OID/SOD. Large focal spot, large OID, small SID = most penumbra = worst sharpness."},
+{t:'image_quality',src:'DHA',q:"The exposure index (EI) in digital radiography measures:",o:["Timer setting","Amount of radiation that reached the digital detector","kVp selected","mA value"],a:1,r:"EI indicates how much radiation reached the detector. Target EI (or deviation index, DI) ensures appropriate technique. Low EI = noise; high EI = excess dose."},
+{t:'image_quality',src:'ARRT',q:"Recorded detail (spatial resolution) is best when:",o:["OID is large","SID is short","Focal spot small, OID minimal, SID long","Screen speed is fast"],a:2,r:"Optimal detail: small focal spot (less penumbra), minimal OID (less magnification), long SID (less divergence/magnification)."},
+{t:'image_quality',src:'DHA',q:"Magnification factor (MF) equals:",o:["SID/OID","SID/SOD","SOD/SID","OID/SID"],a:1,r:"MF = SID/SOD (SOD = SID – OID). MF > 1 means magnification. To minimize magnification: minimize OID, maximize SID."},
+{t:'image_quality',src:'ARRT',q:"'Short scale contrast' in radiography refers to:",o:["Many shades of gray","Few shades of gray (high contrast — black and white)","Very long exposure time","Low contrast between adjacent structures"],a:1,r:"Short scale (high contrast): few gray shades, stark differences. Produced by lower kVp. Useful for extremities. Long scale (low contrast): many gray shades, produced by higher kVp."},
+{t:'image_quality',src:'MOH',q:"Motion unsharpness is minimized by:",o:["Short exposure time and immobilization","Long exposure time","High kVp only","Large focal spot"],a:0,r:"Motion blur = patient movement during exposure. Minimized by: shortest possible exposure time, patient immobilization, breath-holding instructions."},
+{t:'image_quality',src:'ARRT',q:"The modulation transfer function (MTF) describes:",o:["Amount of scatter reaching the detector","How faithfully the imaging system reproduces spatial detail at different frequencies","The contrast response of the film","The dynamic range of the detector"],a:1,r:"MTF quantifies how faithfully a system transfers contrast from object to image at different spatial frequencies. MTF of 1 = perfect reproduction; MTF of 0 = no detail reproduced."},
+{t:'image_quality',src:'DHA',q:"Image receptor speed is inversely related to:",o:["mAs required","Spatial resolution (faster speed = lower resolution)","kVp","Patient dose"],a:1,r:"Faster speed = less mAs needed = lower patient dose, but also lower spatial resolution (coarser grain/larger pixels). There is a trade-off between speed and resolution."},
+{t:'image_quality',src:'ARRT',q:"The distance that most significantly affects geometric unsharpness is:",o:["SID only","OID — the closer the object to the IR, the sharper the image","SOD","SID and OID equally"],a:1,r:"OID (object-to-image distance) has the greatest practical impact on geometric unsharpness. Keeping anatomy close to the detector minimizes magnification and penumbra."},
+{t:'image_quality',src:'MOH',q:"'Contrast resolution' refers to the ability to:",o:["Distinguish fine structural detail (spatial resolution)","Detect small differences in tissue density (low-contrast detectability)","Control brightness in digital imaging","Measure patient dose"],a:1,r:"Contrast resolution (low-contrast detectability): ability to distinguish objects with similar densities. CT excels at contrast resolution (~0.5% difference); radiography excels at spatial resolution."},
+{t:'image_quality',src:'DHA',q:"Dynamic range in digital imaging refers to:",o:["Range of motion artifacts produced","Range of exposure levels the detector can capture and display usefully","Maximum kVp","Number of pixels"],a:1,r:"Digital detectors have wide dynamic range (~10,000:1 vs ~40:1 for screen-film), allowing useful images over a wider range of exposures. This prevents over/underexposure issues common with film."},
+{t:'image_quality',src:'ARRT',q:"An overexposed radiograph (excessive mAs) on analog film appears:",o:["Too light (underexposed)","Too dark (too much density)","Normal","Grainy"],a:1,r:"Excessive mAs = too many photons = too much film blackening = too dark/dense image. In digital systems, algorithms compensate but the patient still receives excess dose."},
+{t:'image_quality',src:'MOH',q:"The reciprocity law in radiography states:",o:["Different combinations of mA and time that produce the same mAs give the same exposure","Increasing kVp always doubles density","Distance and density are directly proportional","Speed and resolution are directly proportional"],a:0,r:"Reciprocity law: 200 mA × 0.5 s = 100 mAs; 100 mA × 1 s = 100 mAs. These give equivalent exposures. (Law holds for screen-film; slight failure at very long/short exposures.)"},
+{t:'image_quality',src:'DHA',q:"The primary factor that determines image noise in digital radiography is:",o:["kVp selected","Number of X-ray photons reaching the detector (controlled by mAs)","SID","Focal spot size"],a:1,r:"Noise in digital systems = quantum mottle from insufficient photons. Determined by mAs and kVp (which affect photon quantity and energy). More photons = less noise."},
+
+// ─── RADIATION PROTECTION (20) ───
+{t:'radiation_prot',src:'ICRP/MOH',q:"The three cardinal principles of radiation protection are:",o:["Collimation, filtration, shielding","Time, distance, shielding","kVp, mAs, SID","PPE, dosimetry, signage"],a:1,r:"Time: minimize exposure duration. Distance: maximize distance (inverse square law). Shielding: use lead barriers/aprons."},
+{t:'radiation_prot',src:'ICRP/MOH',q:"ALARA stands for:",o:["Always Lead And Reduce Attenuation","As Low As Reasonably Achievable","All Levels Are Relatively Acceptable","Automatic Lead Attenuation Radiation Algorithm"],a:1,r:"ALARA requires doses be kept as low as reasonably achievable, considering social, economic, and practical factors. The basis for radiation protection philosophy."},
+{t:'radiation_prot',src:'ICRP',q:"Annual occupational effective dose limit (ICRP) is:",o:["10 mSv","20 mSv averaged over 5 years","50 mSv","100 mSv"],a:1,r:"ICRP recommends 20 mSv/year averaged over 5 years, with no single year exceeding 50 mSv."},
+{t:'radiation_prot',src:'ICRP',q:"Effective dose limit for declared pregnancy (whole gestation) is approximately:",o:["20 mSv","5 mSv (1 mSv/month once declared)","50 mSv","10 mSv"],a:1,r:"Once declared, fetal dose should not exceed 1 mSv/month or 5 mSv total. Embryo most sensitive at 3–8 weeks (organogenesis)."},
+{t:'radiation_prot',src:'ICRP',q:"The SI unit for absorbed dose is:",o:["Roentgen","Sievert (Sv)","Gray (Gy)","Becquerel (Bq)"],a:2,r:"Gray (Gy) = 1 J/kg = absorbed dose (energy per unit mass). Sievert = equivalent/effective dose. Becquerel = radioactivity. Roentgen = legacy exposure unit."},
+{t:'radiation_prot',src:'ICRP',q:"The SI unit for equivalent and effective dose is:",o:["Gray (Gy)","Becquerel (Bq)","Sievert (Sv)","Roentgen (R)"],a:2,r:"Sievert (Sv) = Gy × radiation weighting factor (W_R). For X-rays, W_R = 1. So for diagnostic X-rays, 1 Gy = 1 Sv."},
+{t:'radiation_prot',src:'MOH',q:"Gonadal shielding is recommended when gonads are within how many cm of the primary beam?",o:["2 cm","5 cm","10 cm","15 cm"],a:1,r:"Gonadal shielding when gonads within ~5 cm of primary beam AND shielding won't compromise diagnostic information."},
+{t:'radiation_prot',src:'MOH',q:"Which dosimeter provides continuous real-time dose reading?",o:["Film badge","TLD badge","Electronic personal dosimeter (pocket dosimeter)","OSL badge"],a:2,r:"Electronic personal dosimeter (EPD) gives real-time readout. Film, TLD, and OSL require laboratory processing."},
+{t:'radiation_prot',src:'MOH',q:"Without a lead barrier during portable radiography, stand at least:",o:["0.5 meters","1 meter","2 meters (6 feet)","5 meters"],a:2,r:"At 2 meters, scatter is greatly reduced. Position yourself at 90° from the primary beam direction for minimum scatter exposure."},
+{t:'radiation_prot',src:'ARRT',q:"Collimation primarily reduces patient dose by:",o:["Reducing kVp","Limiting the volume of tissue irradiated — fewer photons entering the body","Reducing scatter reaching the detector","Increasing mAs"],a:1,r:"Collimation limits primary beam to area of interest, reducing irradiated tissue volume and thus total patient dose and scatter production."},
+{t:'radiation_prot',src:'ICRP',q:"The radiation weighting factor (W_R) for diagnostic X-rays is:",o:["0.5","1","5","20"],a:1,r:"W_R for X-rays, gamma rays, and electrons = 1. For neutrons it varies (5–20). For alpha particles = 20. W_R converts absorbed dose (Gy) to equivalent dose (Sv)."},
+{t:'radiation_prot',src:'MOH',q:"A lead apron of 0.5 mm Pb equivalent attenuates what percentage of scatter radiation?",o:["40%","70%","90–95%","99.9%"],a:2,r:"0.5 mm Pb apron attenuates ~90–95% of scatter radiation. At typical diagnostic energies, this provides substantial protection for the trunk/gonads."},
+{t:'radiation_prot',src:'ARRT',q:"The 10-day rule (now largely abandoned) was concerned with:",o:["X-raying patients on an empty stomach","Avoiding non-emergency abdominal/pelvic X-rays in potentially pregnant women during late luteal phase","Limiting CT examinations to 10 per year","Repeating films taken within 10 days"],a:1,r:"10-day rule (historical): restrict lower abdominal/pelvic X-rays to first 10 days after menstruation. Now replaced by asking about pregnancy before each exam and using ALARA principles."},
+{t:'radiation_prot',src:'ICRP',q:"The public annual effective dose limit is:",o:["20 mSv","10 mSv","1 mSv","0.5 mSv"],a:2,r:"Public dose limit: 1 mSv/year effective dose (ICRP). Medical exposures are NOT included in this limit — patients may receive much more for diagnostic benefit."},
+{t:'radiation_prot',src:'MOH',q:"Thermoluminescent dosimeters (TLDs) work by:",o:["Darkening of silver halide crystals","Trapping electrons in a crystal lattice; when heated they release light proportional to absorbed dose","Producing electrical charge proportional to dose","Measuring ionization of air"],a:1,r:"TLDs (LiF, CaF₂): radiation raises electrons to excited states in the crystal. Heating (readout) releases electrons, emitting thermoluminescent light proportional to dose."},
+{t:'radiation_prot',src:'ARRT',q:"What is the tissue/organ with the highest radiation weighting factor (W_T) in ICRP effective dose calculations?",o:["Skin","Thyroid","Gonads (combined)","Bone marrow"],a:3,r:"In ICRP 103, the highest W_T values are: red bone marrow = 0.12, breast = 0.12, colon = 0.12, lung = 0.12, stomach = 0.12. Gonads combined = 0.08."},
+{t:'radiation_prot',src:'MOH',q:"Optically stimulated luminescence (OSL) dosimeters use which material?",o:["Lithium fluoride","Aluminum oxide (Al₂O₃)","Silver bromide","Cesium iodide"],a:1,r:"OSL dosimeters use aluminum oxide (Al₂O₃:C). Laser light stimulates trapped electrons, releasing light proportional to absorbed dose. Can be re-read multiple times."},
+{t:'radiation_prot',src:'ICRP',q:"Stochastic effects of radiation are characterized by:",o:["A threshold dose below which no effect occurs","Increasing probability with dose but constant severity; no threshold assumed (LNT)","Always occurring after a fixed dose","Occurring only during high-dose procedures"],a:1,r:"Stochastic effects (cancer, hereditary): probability increases with dose but severity doesn't change. No threshold assumed (LNT model). Examples: carcinogenesis, hereditary mutations."},
+{t:'radiation_prot',src:'ARRT',q:"Deterministic (tissue reaction) effects are characterized by:",o:["No threshold — any dose causes effect","A threshold dose that must be exceeded; severity increases above threshold","Random occurrence with no dose relationship","Only occurring with chronic low doses"],a:1,r:"Deterministic effects (cataract, skin erythema, hair loss, radiation sickness): require minimum threshold dose. Above threshold, severity increases with dose. Reversible at moderate doses."},
+{t:'radiation_prot',src:'MOH',q:"What minimum lead equivalent is required for protective aprons in fluoroscopy?",o:["0.25 mm Pb","0.5 mm Pb","1.0 mm Pb","2.0 mm Pb"],a:0,r:"Minimum 0.25 mm Pb equivalent for aprons (NCRP). 0.5 mm Pb for frontal aprons preferred in high-dose fluoroscopy. Thyroid shields add 0.5 mm Pb."},
+
+// ─── RADIATION BIOLOGY (15) ───
+{t:'rad_biology',src:'ARRT',q:"According to the Law of Bergonié and Tribondeau, cells are most radiosensitive when:",o:["Highly differentiated, non-dividing","Rapidly dividing, undifferentiated, with long future mitotic life","Mature muscle cells","Post-mitotic neurons"],a:1,r:"1906: Radiosensitivity ∝ mitotic activity, ÷ differentiation. Bone marrow, gonads, embryo most sensitive. Neurons, muscle most resistant."},
+{t:'rad_biology',src:'ARRT',q:"Stochastic radiation effects include:",o:["Radiation-induced cataract","Skin erythema","Cancer induction and hereditary effects","Hair loss (epilation)"],a:2,r:"Stochastic effects (no threshold, random): cancer induction, hereditary mutations. Deterministic effects (threshold): cataract, erythema, epilation, acute radiation syndrome."},
+{t:'rad_biology',src:'ARRT',q:"The most radiosensitive phase of the cell cycle is:",o:["S phase","G1","M phase (mitosis)","G2"],a:2,r:"Most sensitive: M phase (mitosis) and G2 (pre-mitotic). Most resistant: late S phase (most active DNA repair)."},
+{t:'rad_biology',src:'ARRT',q:"The critical target molecule for radiation damage is:",o:["RNA","Proteins","DNA","Cell membrane lipids"],a:2,r:"DNA is the critical target. Double-strand breaks are most serious (can cause mutations, cell death). Single-strand breaks are usually repaired."},
+{t:'rad_biology',src:'ARRT',q:"Indirect radiation damage to DNA occurs through:",o:["Direct ionization of the DNA","Free radical production (OH•) from water radiolysis","Compton scatter within the nucleus","Heating of the nucleus"],a:1,r:"~2/3 of radiation damage is indirect: radiation ionizes water (radiolysis) producing OH• free radicals that attack DNA. Oxygen enhances free radical damage (oxygen enhancement ratio, OER)."},
+{t:'rad_biology',src:'ARRT',q:"Which organ system is most radiosensitive in adults?",o:["Nervous system","Bone marrow (hematopoietic)","Muscle","Liver"],a:1,r:"Bone marrow (rapidly dividing cells) and gonads are most radiosensitive. Lymphoid tissue also very sensitive. Neurons and muscle most resistant."},
+{t:'rad_biology',src:'ARRT',q:"The linear no-threshold (LNT) model assumes:",o:["Safe threshold below which no cancer risk exists","Risk proportional to dose with no safe threshold","High doses safe but low doses dangerous","Risk plateaus above certain dose"],a:1,r:"LNT: any dose, however small, carries some cancer/hereditary effect probability. Conservative model underlying radiation protection standards."},
+{t:'rad_biology',src:'DHA',q:"The LD 50/30 in radiation biology refers to:",o:["Lethal dose causing 50% tumor shrinkage","Lethal dose causing 50% mortality in 30 days","Dose reducing radiosensitivity by 50%","Dose causing 50% cell killing in 30 minutes"],a:1,r:"LD 50/30: dose causing 50% mortality in an exposed population within 30 days. For humans, LD 50/30 ≈ 3–4 Gy whole-body without medical support."},
+{t:'rad_biology',src:'ARRT',q:"The oxygen enhancement ratio (OER) describes:",o:["How oxygen increases image quality","How much more radiosensitive oxygenated cells are vs. hypoxic cells (OER ~2.5–3 for X-rays)","The role of oxygen in radiochemical reactions","Oxygen consumption during CT scanning"],a:1,r:"OER ≈ 2.5–3 for X-rays: well-oxygenated cells need ~3× less dose for same cell killing than hypoxic cells. Tumor hypoxia is a major cause of radiation resistance."},
+{t:'rad_biology',src:'DHA',q:"The 'four Rs' of radiobiology are:",o:["Repair, Reoxygenation, Redistribution, Repopulation","Resistance, Response, Rate, Recovery","Repair, Resistance, Repopulation, Response","Reoxygenation, Redistribution, Recovery, Recurrence"],a:0,r:"Four Rs of radiobiology (fractionation rationale): Repair (of sublethal damage), Reoxygenation (of hypoxic cells), Redistribution (of cells in cycle), Repopulation (tumor cell proliferation)."},
+{t:'rad_biology',src:'ARRT',q:"Acute radiation syndrome (ARS) follows whole-body doses greater than approximately:",o:["10 mSv","100 mSv","1 Gy","10 Gy"],a:2,r:"ARS requires >~1 Gy whole-body dose. Hematopoietic syndrome: 1–8 Gy. GI syndrome: 8–50 Gy. CNS syndrome: >50 Gy. Prodromal phase: nausea, vomiting within hours."},
+{t:'rad_biology',src:'DHA',q:"The mean lethal dose (D₀) in radiation biology refers to:",o:["Dose causing 50% cell kill in 30 days","Dose that reduces surviving fraction to 37% (1/e) in the exponential portion of the survival curve","Dose required for 100% cell kill","Dose that doubles mutation rate"],a:1,r:"D₀: dose reducing survival to 37% (0.37 = 1/e). It characterizes the slope of the exponential portion of the cell survival curve — smaller D₀ = more radiosensitive cells."},
+{t:'rad_biology',src:'ARRT',q:"Which of the following is a late stochastic effect of radiation?",o:["Erythema at 2 Gy","Radiation-induced leukemia (appearing years after exposure)","Hair loss at 3 Gy","Nausea after 1 Gy"],a:1,r:"Radiation-induced leukemia is a stochastic late effect, appearing 2–20 years after exposure. Erythema, hair loss, and nausea are deterministic effects occurring soon after high doses."},
+{t:'rad_biology',src:'DHA',q:"The relative biological effectiveness (RBE) compares:",o:["Different kVp values","The biological effectiveness of a radiation type relative to 250 kVp X-rays","Absorbed dose vs. effective dose","Different organs' radiosensitivity"],a:1,r:"RBE = dose of reference radiation (250 kVp X-rays) / dose of test radiation for same biological effect. High-LET radiation (alpha, neutrons) has higher RBE than low-LET (X-rays)."},
+{t:'rad_biology',src:'ARRT',q:"The embryo/fetus is most radiosensitive during which period?",o:["Pre-implantation (0–2 weeks): all-or-nothing response","Organogenesis (2–8 weeks): major malformations","Fetal period (8–40 weeks): growth retardation, CNS effects","Third trimester only"],a:1,r:"Organogenesis (2–8 weeks): organs forming — radiation causes major congenital malformations. Pre-implantation: implantation failure or normal development (all-or-nothing). Fetal: growth retardation, CNS effects (intellectual disability above 100 mGy)."},
+
+// ─── DIGITAL IMAGING (15) ───
+{t:'digital_imaging',src:'ExamCure DHA',q:"Computed Radiography (CR) uses which image receptor?",o:["Amorphous silicon flat-panel","Photostimulable phosphor (PSP) plate","Cesium iodide scintillator","CCD array"],a:1,r:"CR uses PSP imaging plates (e.g., BaFBr:Eu²⁺). Radiation stores energy; laser scanning releases it as blue light for detection."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"Ghosting in CR imaging is:",o:["Patient motion artifact","Residual image from previous exposure not fully erased","Double exposure","Grid line artifact"],a:1,r:"Ghost image appears when PSP plate is reused without proper erasure (bright light exposure). The residual latent image superimposes on the next exam."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"Direct-conversion flat-panel DR detectors use which material?",o:["Cesium iodide (CsI)","Gadolinium oxysulfide","Amorphous selenium (a-Se)","Barium fluorohalide"],a:2,r:"a-Se directly converts X-ray photons to electrical charge (no intermediate light step), reducing blur from light spread and improving resolution."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"Indirect-conversion flat-panel DR uses which scintillator?",o:["Amorphous selenium","CsI or gadolinium oxysulfide → amorphous silicon photodiodes","Barium fluorohalide","Bismuth germanate"],a:1,r:"Indirect DR: CsI (columnar crystals reduce light spread) converts X-rays to light; a-Si photodiode array converts light to electrical signals."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"Overexposure in digital radiography causes:",o:["Quantum mottle (noise)","Unnecessarily high patient dose — image appears acceptable due to post-processing","Underexposed dark image","Grid cutoff"],a:1,r:"Wide dynamic range of digital systems compensates visually — 'exposure creep'. Patient receives excess dose without image benefit. Monitor EI to detect overexposure."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"PACS stands for:",o:["Patient Automated CT System","Picture Archiving and Communication System","Portable Analog Camera System","Photon Attenuation Correction Software"],a:1,r:"PACS: stores, retrieves, distributes, and presents digital medical images via a network using DICOM format."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"DICOM stands for:",o:["Digital Imaging Communication for Optimal Medicine","Digital Imaging and Communications in Medicine","Direct Imaging and CT Output Method","Diagnostic Imaging Computer Output Mode"],a:1,r:"DICOM: international standard for medical imaging data — file formats, network protocols, metadata. Ensures interoperability between devices and PACS."},
+{t:'digital_imaging',src:'DHA',q:"What is the function of image post-processing in digital radiography?",o:["Change the actual radiation dose received","Optimize the displayed image appearance without re-exposing the patient (windowing, edge enhancement, noise reduction)","Alter the grid ratio","Change kVp after exposure"],a:1,r:"Post-processing: window/level adjustment, edge enhancement, noise reduction. These modify the displayed image but do NOT change the actual dose received."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"The laser in a CR reader stimulates the PSP plate to emit which color of light?",o:["Red light","Blue/violet light (photostimulated luminescence)","White light","Green light"],a:1,r:"PSP plates emit blue/violet light (photostimulated luminescence) when stimulated by red HeNe laser or solid-state laser. This light is filtered and detected by the PMT."},
+{t:'digital_imaging',src:'DHA',q:"What advantage does DR (direct radiography) have over CR?",o:["Lower cost","Faster image acquisition (image appears immediately) and higher DQE","No calibration required","Larger pixel size"],a:1,r:"DR advantages over CR: faster workflow (no plate transport), higher DQE (better dose efficiency), and generally better image quality. CR is cheaper to implement in existing rooms."},
+{t:'digital_imaging',src:'MOH',q:"Image matrix size in digital radiography refers to:",o:["Physical size of the detector","Number of rows × columns of pixels forming the image","kVp × mAs product","Bit depth of each pixel"],a:1,r:"Matrix = rows × columns of pixels. 2560 × 3072 is typical for DR. More pixels = more data = higher potential spatial resolution."},
+{t:'digital_imaging',src:'DHA',q:"The process of converting continuous analog signal to discrete digital values is called:",o:["Modulation","Analog-to-digital conversion (ADC)","Digital-to-analog conversion","Post-processing"],a:1,r:"ADC (Analog-to-Digital Conversion): the detector's analog electrical signal is sampled and converted to discrete digital values (bit depth determines number of gray levels = 2^n)."},
+{t:'digital_imaging',src:'ExamCure DHA',q:"Bit depth of 12 bits in digital imaging allows how many gray levels?",o:["256","1024","4096","65536"],a:2,r:"Gray levels = 2^n. 2^12 = 4096 gray levels (12-bit). 2^8 = 256 (8-bit). 2^16 = 65536 (16-bit). More gray levels = better contrast resolution."},
+{t:'digital_imaging',src:'MOH',q:"What is the purpose of image erasure in CR?",o:["Save the image to PACS","Remove the residual latent image from the PSP plate by exposing it to intense white light","Delete the DICOM file","Reset the kVp settings"],a:1,r:"CR plate erasure: bright white light (or UV) releases remaining trapped electrons from the PSP plate, erasing the latent image and preparing it for reuse."},
+{t:'digital_imaging',src:'DHA',q:"What is 'windowing' (window width and window level) in digital imaging?",o:["The size of the collimation field","Setting the range and center of displayed Hounsfield units (or gray values) to optimize image appearance for specific tissues","The dose index value","The SID setting"],a:1,r:"Window width: range of gray values displayed. Window level: center of that range. Adjusting W/L allows optimization for different tissues without re-exposure. (WW=400, WL=40 = soft tissue; WW=1500, WL=-600 = lung)"},
+
+// ─── CT IMAGING (20) ───
+{t:'ct',src:'ExamCure DHA',q:"Hounsfield Units for water, air, and compact bone are:",o:["Water=0, Air=+1000, Bone=-1000","Water=0, Air=-1000, Bone=+400 to +1000","Water=+40, Air=0, Bone=+1000","Water=-100, Air=-500, Bone=+2000"],a:1,r:"HU scale: Water=0 (reference), Air=−1000, Fat=−100 to −50, Soft tissue=20–80, Blood=55–75, Bone=400–1000."},
+{t:'ct',src:'ExamCure DHA',q:"On non-contrast CT of the brain, acute hemorrhage appears:",o:["Hypodense (dark)","Isodense","Hyperdense (bright/white)","Black"],a:2,r:"Acute hemorrhage is hyperdense (bright) on CT due to clotted blood (high protein content, hemoglobin). Becomes isodense at ~1–3 weeks, then hypodense."},
+{t:'ct',src:'ExamCure DHA',q:"Lung window settings typically use:",o:["WW=80, WL=40","WW=400, WL=40","WW=1500, WL=-600","WW=2500, WL=500"],a:2,r:"Lung window: WW~1500 (wide to accommodate air to vessels), WL~-600 (centered on lung parenchyma). Bone window: WW=2000-4000, WL=400-600."},
+{t:'ct',src:'ExamCure DHA',q:"CT pitch is defined as:",o:["Number of detector rows","Table travel per rotation ÷ beam width","kVp selected","Rotation time"],a:1,r:"Pitch = table feed/rotation ÷ total beam width. <1 = overlapping (higher dose, better resolution). >1 = gaps (faster, lower dose). = 1 = contiguous."},
+{t:'ct',src:'ExamCure DHA',q:"Metal streak artifact in CT is caused by:",o:["Motion","Beam hardening from metal's extreme attenuation","Partial volume effect","Undersampling"],a:1,r:"Metal streak artifact: dense metal absorbs nearly all photons in some projections, creating data inconsistencies (starburst pattern). Reduced by MARS software."},
+{t:'ct',src:'ExamCure DHA',q:"In CT angiography (CTA), timing of scan after contrast injection uses:",o:["Before contrast","Immediately after injection","Bolus tracking or test bolus for peak arterial enhancement","1 hour after injection"],a:2,r:"CTA requires precise timing for peak arterial enhancement. Bolus tracking (automated triggering when target vessel reaches threshold HU) or test bolus technique."},
+{t:'ct',src:'DHA',q:"The 'scout' image in CT is also called:",o:["Topogram/localizer/scoutview — a low-dose digital projection radiograph","Axial CT slice","Coronal reconstruction","MIP image"],a:0,r:"Scout/topogram/localizer: a digital radiograph obtained before CT scanning for patient positioning, scan planning, and dose modulation reference."},
+{t:'ct',src:'ExamCure DHA',q:"CTDIvol (CT Dose Index volume) measures:",o:["Total exam dose","Radiation dose per rotation accounting for beam overlap and pitch","Number of detector rows","Gantry rotation speed"],a:1,r:"CTDIvol = CTDIw/pitch. Measures dose per rotation in the scan volume (not total exam dose). DLP (CTDIvol × scan length) better reflects total dose."},
+{t:'ct',src:'DHA',q:"What is 'multiplanar reformation (MPR)' in CT?",o:["Increasing slice thickness","Reconstructing CT data in planes other than axial (coronal, sagittal, oblique) from the volumetric dataset","Reducing image noise","Subtracting bone from soft tissue"],a:1,r:"MPR: mathematically reformatting the axial CT volume in any plane (coronal, sagittal, curved) without additional radiation. Enables better anatomical evaluation."},
+{t:'ct',src:'ExamCure DHA',q:"Ring artifact in CT is caused by:",o:["Patient motion","Malfunctioning detector element in 3rd generation CT","Metal implants","Beam hardening"],a:1,r:"Ring artifact: a malfunctioning (miscalibrated or dead) detector in 3rd generation CT causes concentric ring-shaped artifact. Fixed by detector calibration or detector replacement."},
+{t:'ct',src:'DHA',q:"Which reconstruction algorithm provides highest spatial resolution in CT?",o:["Smooth/soft tissue kernel","High spatial frequency (bone/edge enhancement) kernel","Standard algorithm","Low-pass filter"],a:1,r:"High spatial frequency (bone) kernel: maximizes edge sharpness and spatial resolution but increases noise. Smooth kernel: reduces noise but blurs detail. Trade-off between resolution and noise."},
+{t:'ct',src:'ExamCure DHA',q:"Automatic tube current modulation (ATCM) in CT reduces dose by:",o:["Keeping tube current constant at maximum","Varying mA based on patient attenuation in real-time (angular and z-axis modulation)","Reducing kVp automatically","Increasing pitch"],a:1,r:"ATCM: reduces mA in less-attenuating directions/anatomy (thin/less dense areas) and increases in more-attenuating areas. Reduces dose 20–50% without sacrificing image quality."},
+{t:'ct',src:'DHA',q:"On CT, the liver normally has a slightly higher attenuation than the spleen by approximately:",o:["1–5 HU","5–10 HU","10–30 HU","50 HU"],a:1,r:"Normal: Liver ~60–70 HU, Spleen ~50–60 HU. Liver is approximately 5–10 HU denser than spleen on non-contrast CT. Fatty liver: liver becomes less dense than spleen."},
+{t:'ct',src:'ExamCure DHA',q:"What is 'partial volume effect' in CT?",o:["Effect of table pitch on resolution","Averaging of two different tissue densities within a single voxel producing intermediate HU value","Image noise at edges","Streak artifact from bone"],a:1,r:"Partial volume effect: when a voxel contains two different tissues, the measured HU is an average. Can make a lesion appear to have different density than actual. Reduced by thinner slices."},
+{t:'ct',src:'DHA',q:"Dose length product (DLP) in CT is calculated as:",o:["CTDIvol × mAs","CTDIvol × scan length (cm)","Number of rotations × kVp","Pitch × detector rows"],a:1,r:"DLP (mGy·cm) = CTDIvol × scan length. Better reflects total energy deposited in patient than CTDIvol alone. Used to calculate effective dose (E ≈ DLP × k-factor)."},
+{t:'ct',src:'ExamCure DHA',q:"What is 'iterative reconstruction' in CT?",o:["Filtered back-projection (FBP) algorithm","Advanced mathematical algorithm that iteratively updates the image estimate to reduce noise and artifacts, allowing dose reduction","Using multiple CT scanners","Reconstruction in all three planes"],a:1,r:"Iterative reconstruction (MBIR, ASIR, SAFIRE, etc.): iteratively refines the image estimate, reducing noise and improving quality at lower doses than FBP. Can reduce CT dose by 30–65%."},
+{t:'ct',src:'DHA',q:"Which CT acquisition mode provides true volumetric isotropic data for high-quality MPR and 3D?",o:["Sequential (axial) CT","Helical (spiral) CT with multi-detector row (MDCT)","Single-slice CT","Step-and-shoot CT"],a:1,r:"Helical MDCT: table moves continuously while gantry rotates (helical), acquiring volumetric data with overlapping reconstructions. Enables isotropic voxels for high-quality reformats in any plane."},
+{t:'ct',src:'ExamCure DHA',q:"What is the primary application of dual-energy CT (DECT)?",o:["Double the radiation dose for better quality","Use two different energy levels to characterize material composition (e.g., uric acid vs calcium calculi, iodine quantification)","Improve spatial resolution","Allow longer scan times"],a:1,r:"DECT acquires data at two kVp values, exploiting different tissue attenuation at different energies for: stone characterization (gout vs calcium), iodine mapping, virtual non-contrast, bone/metal suppression."},
+{t:'ct',src:'DHA',q:"The normal aortic diameter at the level of the renal arteries is approximately:",o:["<1.5 cm","<2.0 cm","<3.0 cm (>3.0 cm = abdominal aortic aneurysm)","<4.0 cm"],a:2,r:"Normal abdominal aorta diameter: <3 cm. AAA definition: >3 cm (>1.5× the normal diameter). Surgical repair is typically indicated at >5.5 cm diameter."},
+{t:'ct',src:'ExamCure DHA',q:"In CT, the term 'noise index' or 'image quality index' refers to:",o:["Number of detector rows","Target image noise level that the scanner uses for dose modulation to achieve a consistent image quality","Maximum kVp","Pitch value"],a:1,r:"Noise index (GE) / reference effective mAs (Siemens): target noise level for ATCM. Setting a higher noise index = lower dose but noisier images. Setting lower = higher quality but more dose."},
+
+// ─── MRI (15) ───
+{t:'mri',src:'ExamCure DHA',q:"MRI is based on which principle?",o:["X-ray attenuation","Nuclear magnetic resonance of hydrogen protons","Beta radiation from radioisotopes","Ultrasound reflection"],a:1,r:"MRI uses NMR: H-protons precess at Larmor frequency in a strong magnetic field. RF pulses disturb equilibrium; relaxation signals create images."},
+{t:'mri',src:'ExamCure DHA',q:"On T2-weighted MRI, fluid (CSF, edema) appears:",o:["Dark (hypointense)","Isointense to muscle","Bright (hyperintense)","Gray"],a:2,r:"T2: long T2 tissues = bright. CSF, edema, synovial fluid = very bright. T2 = 'Water is White.'"},
+{t:'mri',src:'ExamCure DHA',q:"On T1-weighted MRI, fat appears:",o:["Dark","Bright (hyperintense)","Isointense to CSF","Black (signal void)"],a:1,r:"Fat: short T1 = bright on T1. T1 ideal for anatomy, fat, subacute hemorrhage (methemoglobin), post-contrast enhancement."},
+{t:'mri',src:'ExamCure DHA',q:"FLAIR suppresses the signal of:",o:["Fat","Blood","CSF (fluid)","Gadolinium contrast"],a:2,r:"FLAIR (Fluid-Attenuated Inversion Recovery): nulls free CSF signal, making it dark, while edema/pathological fluid remains bright. Excellent for periventricular MS lesions, SAH."},
+{t:'mri',src:'ExamCure DHA',q:"Gadolinium MRI contrast primarily enhances:",o:["All tissues equally","Areas with BBB breakdown or increased vascularity","Fat","CSF spaces"],a:1,r:"Gadolinium shortens T1, causing T1 brightening in areas with disrupted BBB (tumors, inflammation, infection) or hypervascular tissue."},
+{t:'mri',src:'ExamCure DHA',q:"DWI (diffusion-weighted imaging) is most useful for detecting:",o:["Chronic fat","Bone marrow edema","Acute ischemic stroke (cytotoxic edema within minutes)","Normal white matter"],a:2,r:"DWI detects restricted diffusion (bright DWI, dark ADC map) in acute stroke within minutes of onset. Also useful for abscess, diffuse axonal injury, Creutzfeldt-Jakob disease."},
+{t:'mri',src:'DHA',q:"T1 relaxation time represents:",o:["How quickly transverse magnetization decays","How quickly longitudinal magnetization returns to equilibrium after RF pulse (spin-lattice relaxation)","The echo time","The repetition time"],a:1,r:"T1 (longitudinal/spin-lattice relaxation): time for 63% recovery of longitudinal magnetization. Short T1 (fat, protein solutions) = bright on T1. Long T1 (water, CSF) = dark on T1."},
+{t:'mri',src:'DHA',q:"T2 relaxation time represents:",o:["Recovery of longitudinal magnetization","Decay of transverse magnetization due to spin-spin interactions","Echo time","Larmor frequency"],a:1,r:"T2 (transverse/spin-spin relaxation): time for 63% decay of transverse magnetization. Long T2 (free water) = bright on T2. Short T2 (cortical bone, calcification, iron) = dark on T2."},
+{t:'mri',src:'ExamCure DHA',q:"Which MRI sequence is T2* weighted and used to detect hemorrhage and calcification?",o:["Spin echo","FLAIR","Gradient echo (GRE)","Diffusion weighted"],a:2,r:"GRE sequences are sensitive to magnetic susceptibility (T2*). Hemosiderin, calcium, and air create 'blooming' artifact (appear larger and darker than actual size). Used to detect microbleeds."},
+{t:'mri',src:'DHA',q:"MR spectroscopy (MRS) in the brain measures:",o:["Blood flow velocity","Concentration of metabolites (NAA, Cho, Cr, Lac) in brain tissue","Diffusion of water molecules","Gadolinium concentration"],a:1,r:"MRS: measures brain metabolites. NAA (N-acetylaspartate) = neuronal marker (decreased in neurodegenerative disease). Cho (choline) = cell membrane turnover (elevated in tumors). Lac (lactate) = anaerobic metabolism."},
+{t:'mri',src:'ExamCure DHA',q:"What is the Larmor frequency?",o:["Frequency of RF pulses used in MRI","Frequency at which protons precess in a magnetic field (f = γ × B₀; at 1.5T ≈ 64 MHz; at 3T ≈ 128 MHz)","Repetition time of the pulse sequence","Frequency of gradient coil switching"],a:1,r:"Larmor frequency = gyromagnetic ratio (γ) × field strength (B₀). For H-protons: γ = 42.58 MHz/T. At 1.5T: 63.87 MHz; at 3T: 127.74 MHz. RF pulses must match Larmor frequency for resonance."},
+{t:'mri',src:'DHA',q:"What is a Faraday cage in MRI?",o:["The gradient coil housing","A copper mesh enclosure surrounding the MRI room that blocks external RF interference","The superconducting magnet housing","The RF transmit coil"],a:1,r:"Faraday cage: copper mesh shielding that surrounds the MRI suite, blocking external RF interference from entering the room and internal RF from disturbing external equipment (e.g., pacemakers in adjacent areas)."},
+{t:'mri',src:'ExamCure DHA',q:"Functional MRI (fMRI) detects brain activity by measuring:",o:["Glucose metabolism (PET-like)","BOLD (Blood Oxygen Level Dependent) signal changes due to neurovascular coupling","Direct electrical neuronal signals","Gadolinium enhancement patterns"],a:1,r:"BOLD fMRI: neuronal activity → increased local blood flow → increased oxyHb:deoxyHb ratio → T2* signal change. Used for pre-surgical mapping (speech, motor areas) and neuroscience research."},
+{t:'mri',src:'DHA',q:"What is the purpose of gradient coils in MRI?",o:["Generate the main magnetic field","Create spatial variations in field strength to encode spatial information (frequency/phase encoding)","Transmit RF pulses","Cool the superconducting magnet"],a:1,r:"Gradient coils (x, y, z) create linear field gradients overlaid on the main field. They enable spatial encoding: slice selection, frequency encoding (readout), and phase encoding."},
+{t:'mri',src:'ExamCure DHA',q:"The repetition time (TR) in MRI affects:",o:["T2 contrast primarily","T1 contrast — longer TR allows more T1 recovery, reducing T1 weighting","Echo time","Slice thickness"],a:1,r:"TR (time between RF pulses): short TR = T1 weighting (tissues with different T1 values are differentiated). Long TR = more complete T1 recovery = less T1 weighting = needed for T2-weighted sequences."},
+
+// ─── MRI SAFETY (10) ───
+{t:'mri_safety',src:'ExamCure DHA',q:"The MRI zone system (I–IV) controls:",o:["Patient flow by condition","Access based on proximity to the static magnetic field","Pediatric vs. adult patient separation","Magnet strength classification"],a:1,r:"Zone I: public. Zone II: interface/waiting. Zone III: restricted scanner room access. Zone IV: magnet room itself (most restricted)."},
+{t:'mri_safety',src:'ExamCure DHA',q:"The most dangerous physical hazard of MRI for ferromagnetic objects is:",o:["RF heating","Projectile effect — ferromagnetic objects accelerate rapidly toward the magnet","Image ghosting","Magnet quench"],a:1,r:"Projectile effect: ferromagnetic objects (wheelchairs, gas cylinders, scissors) are attracted and can become lethal projectiles. Non-ferromagnetic materials (titanium) are safe."},
+{t:'mri_safety',src:'ExamCure DHA',q:"Nephrogenic systemic fibrosis (NSF) is associated with:",o:["Iodinated contrast","Gadolinium-based contrast agents in severe renal failure (eGFR <30)","Barium sulfate","SPIO agents"],a:1,r:"NSF: fibrosing disorder from gadolinium retention in severe renal impairment. Screen eGFR before GBCA. Low-stability GBCAs (linear ionic/non-ionic) pose highest risk."},
+{t:'mri_safety',src:'ExamCure DHA',q:"Which is an absolute contraindication to MRI?",o:["Titanium hip prosthesis","Non-ferromagnetic stainless steel clips","Older ferromagnetic cochlear implants","Dental amalgam fillings"],a:2,r:"Older ferromagnetic cochlear implants: ferromagnetic components can be displaced, torqued, or have electronics damaged. Newer cochlear implants may be conditionally MRI-safe at 1.5T."},
+{t:'mri_safety',src:'ExamCure DHA',q:"SAR (Specific Absorption Rate) in MRI measures:",o:["Table movement speed","RF energy deposited in tissue (W/kg) — measure of heating","Spatial resolution","Signal-to-noise ratio"],a:1,r:"SAR (W/kg): rate of RF energy absorbed per unit mass. Limits: normal mode ≤2 W/kg whole-body. Excess RF → tissue heating. SAR increases with higher field strength and flip angle."},
+{t:'mri_safety',src:'DHA',q:"What precaution is essential before a patient with an unknown implant enters the MRI scanner?",o:["Just proceed if the patient feels fine","Identify the implant (manufacturer, model) using implant registries or X-ray to determine MRI compatibility","Only screen for pacemakers","Screen only if the implant is in the scan field"],a:1,r:"Unknown implants must be identified (X-ray to visualize, implant registry, surgical records, contact manufacturer) before entry into the MRI environment. MR Conditional labeling is device-specific."},
+{t:'mri_safety',src:'ExamCure DHA',q:"Gradient-induced peripheral nerve stimulation (PNS) in MRI occurs due to:",o:["Main magnetic field B₀","Rapidly switching gradient magnetic fields inducing electrical currents in tissue","RF pulses","Static magnetic field gradient"],a:1,r:"PNS: rapidly switching gradients (dB/dt) induce electrical currents in tissue. Causes tingling or involuntary muscle twitching. IEC limits for dB/dt prevent cardiac stimulation."},
+{t:'mri_safety',src:'DHA',q:"What is a 'quench' in MRI?",o:["Cooling of the patient","Rapid loss of superconductivity in the magnet with rapid boiloff of liquid helium — emergency event","Normal magnet shutdown procedure","Reduction in gradient strength"],a:1,r:"Quench: superconducting coils exceed critical temperature, losing superconductivity. Rapid helium boiloff can displace oxygen in the room (asphyxiation risk). Emergency venting systems (quench pipes) direct gas outside."},
+{t:'mri_safety',src:'ExamCure DHA',q:"A patient with a cardiac pacemaker is generally:",o:["Safe in any MRI scanner","Absolutely contraindicated for all MRI regardless of pacemaker type","Conditionally safe in 1.5T with an MRI-conditional pacemaker under specific conditions","Safe only in low-field open MRI"],a:1,r:"Most pacemakers: MRI absolute contraindication due to risk of inhibition, rapid pacing, lead heating, and reed switch activation. MR-conditional pacemakers exist but require strict protocols and cardiologist involvement."},
+{t:'mri_safety',src:'DHA',q:"The 5-Gauss (0.5 mT) line around an MRI magnet is significant because:",o:["It defines the zone where MRI signals are strongest","Beyond this line, magnetic field is considered safe for most medical devices and implants including pacemakers","It represents the maximum patient exposure limit","It defines the edge of the magnet housing"],a:1,r:"5-Gauss line: fringe field boundary beyond which sensitive electronics (pacemakers, CRTs, cochlear implants) are generally considered safe. Marked with warning signs and physical barriers."},
+
+// ─── FLUOROSCOPY (10) ───
+{t:'fluoroscopy',src:'PrometricMCQ',q:"The primary hazard of fluoroscopy vs. conventional radiography is:",o:["Higher kVp","Significantly higher cumulative radiation dose from continuous exposure","More complex equipment","Need for contrast"],a:1,r:"Fluoroscopy: continuous X-ray exposure accumulates much higher dose than single radiographs. Skin dose rates: 20–100 mGy/min or higher in interventional cases."},
+{t:'fluoroscopy',src:'PrometricMCQ',q:"'Last image hold' (LIH) in fluoroscopy means:",o:["Machine stores last image for billing","Final fluoroscopic frame is stored and displayed when pedal released, eliminating need for spot film","Table locks after last image","Image deletes after each study"],a:1,r:"LIH: displays most recent fluoroscopic frame on monitor when continuous fluoroscopy stops. Allows image study without additional radiation."},
+{t:'fluoroscopy',src:'PrometricMCQ',q:"Which examination uses fluoroscopy to evaluate fallopian tube patency?",o:["Barium swallow","VCUG","Hysterosalpingography (HSG)","IVU"],a:2,r:"HSG: contrast injected through cervix outlines uterine cavity and fallopian tubes under fluoroscopy. Used in infertility workup."},
+{t:'fluoroscopy',src:'PrometricMCQ',q:"Barium sulfate is contraindicated when GI perforation is suspected because:",o:["It is toxic","Barium in peritoneum causes severe chemical peritonitis/mediastinitis","It obscures perforation","It is absorbed too quickly"],a:1,r:"Barium in the peritoneum or mediastinum causes severe chemical inflammation (granulomas, fibrosis). Use water-soluble iodinated contrast (e.g., Gastrografin) instead."},
+{t:'fluoroscopy',src:'PrometricMCQ',q:"The modified barium swallow study evaluates:",o:["Stomach and duodenum","Oropharyngeal and esophageal swallowing for aspiration assessment","Colonic transit time","Bile duct filling"],a:1,r:"Modified barium swallow (videofluoroscopic swallowing study): real-time assessment of oropharyngeal and proximal esophageal swallowing mechanics, detecting aspiration and guiding dysphagia management."},
+{t:'fluoroscopy',src:'DHA',q:"What is the purpose of pulsed fluoroscopy?",o:["Increase frame rate for better motion capture","Reduce radiation dose by using intermittent X-ray pulses rather than continuous radiation","Improve image quality","Allow use without contrast agents"],a:1,r:"Pulsed fluoroscopy: X-ray emitted in short pulses (e.g., 1–15 frames/second) rather than continuously. Significantly reduces dose compared to continuous mode (30 fps) with acceptable image quality."},
+{t:'fluoroscopy',src:'ExamCure DHA',q:"Cine fluoroscopy provides:",o:["Lower dose than standard fluoroscopy","Rapid sequence of images at higher dose rates for cardiac catheterization, swallowing studies","Single image acquisition","CT-like cross-sectional images"],a:1,r:"Cine fluoroscopy: rapid sequence acquisition (15–60 fps) at higher dose rates. Used for cardiac cath (coronary anatomy), cardiac catheterization, and swallowing studies requiring high temporal resolution."},
+{t:'fluoroscopy',src:'DHA',q:"The maximum permitted fluoroscopy entrance skin dose rate in the US (standard mode) is approximately:",o:["2.2 mGy/min","88 mGy/min (10 R/min) air kerma","500 mGy/min","10 mGy/min"],a:1,r:"FDA limits standard fluoroscopy to ≤88 mGy/min (10 R/min) air kerma rate at the patient entrance reference point. High-dose mode can exceed this with activation and audible alert."},
+{t:'fluoroscopy',src:'ExamCure DHA',q:"For fluoroscopic procedures, which C-arm position minimizes radiation exposure to the operator?",o:["Tube above the table (PA projection)","Tube below the table (AP projection) with the image intensifier/detector above","Lateral projection","Oblique at 45 degrees"],a:1,r:"Tube below table (II/detector above): scatter is directed downward (away from operator). Tube above table directs scatter laterally toward operator and scatter dose can be 10× higher."},
+{t:'fluoroscopy',src:'DHA',q:"ERCP (Endoscopic Retrograde Cholangiopancreatography) uses fluoroscopy to visualize:",o:["The large bowel","Bile ducts and pancreatic duct via an endoscope and contrast injection","Renal collecting system","The uterus"],a:1,r:"ERCP: side-viewing endoscope advanced to duodenum, contrast injected into bile and pancreatic ducts, fluoroscopy images biliary and pancreatic ductal systems."},
+
+// ─── CONTRAST MEDIA (10) ───
+{t:'contrast',src:'PrometricMCQ',q:"Iodinated contrast agents are positive contrast agents because they:",o:["Appear black on radiographs","Are negatively charged","Attenuate X-rays (appear white) due to iodine's high atomic number (Z=53)","Produce their own radiation"],a:2,r:"Iodine (Z=53): high atomic number and k-edge at 33.2 keV make it highly effective at attenuating diagnostic X-rays → appears white/bright."},
+{t:'contrast',src:'PrometricMCQ',q:"Barium sulfate is classified as:",o:["Negative contrast agent","Positive (radiopaque) contrast agent","Paramagnetic agent","Radioactive tracer"],a:1,r:"Barium sulfate (BaSO₄, Z=56): positive contrast, insoluble, inert, not absorbed. Used exclusively for GI opacification."},
+{t:'contrast',src:'PrometricMCQ',q:"Most critical assessment before IV iodinated contrast is:",o:["Blood pressure","Renal function (eGFR/creatinine) for contrast-induced nephropathy risk","Hemoglobin level","Bone density"],a:1,r:"Contrast-induced nephropathy (CIN/CI-AKI): highest risk with eGFR <30–45 mL/min/1.73m². Pre-hydration and minimum contrast volume mitigate risk."},
+{t:'contrast',src:'PrometricMCQ',q:"Hives (urticaria) after IV contrast with stable vitals is classified as:",o:["Severe anaphylactic reaction","Vasovagal reaction","Mild allergic-like contrast reaction","CIN"],a:2,r:"Mild reaction: limited hives, flushing, nausea. Treatment: observe, antihistamines. Moderate: extensive hives + bronchospasm + mild hypotension. Severe: anaphylaxis → epinephrine."},
+{t:'contrast',src:'DHA',q:"Non-ionic iodinated contrast agents differ from ionic agents in that they:",o:["Have lower iodine content","Produce fewer ions in solution (lower osmolality) → fewer adverse effects","Are used only for MRI","Have shorter elimination time"],a:1,r:"Non-ionic: lower osmolality (iso-osmolar or low-osmolar). Fewer ions → less chemotoxicity, less disruption of blood-brain barrier, lower rate of adverse reactions vs. high-osmolar ionic agents."},
+{t:'contrast',src:'ExamCure DHA',q:"Gastrografin (diatrizoate meglumine) is indicated instead of barium for:",o:["Routine upper GI series","Suspected perforation or pre-surgery colon studies","Pediatric barium swallow","CT colonography"],a:1,r:"Water-soluble Gastrografin: used when perforation is suspected (safe if leaks outside GI tract), pre-surgery, and when barium is contraindicated. Not for suspected aspiration (hyperosmolar → pulmonary edema)."},
+{t:'contrast',src:'DHA',q:"What is the most common cause of acute adverse reactions to iodinated contrast?",o:["Iodine allergy from dietary iodine","Anaphylactoid (non-IgE-mediated) reactions — mechanism unclear, unpredictable","Direct iodine toxicity","Renal damage"],a:1,r:"Most acute contrast reactions are anaphylactoid (chemotoxic, not IgE-mediated). True IgE-mediated allergy to iodine is uncommon. History of prior contrast reaction increases risk ~5×."},
+{t:'contrast',src:'ExamCure DHA',q:"Premedication for high-risk contrast patients typically includes:",o:["Antibiotics and antivirals","Corticosteroids (e.g., prednisone 50 mg at 13h, 7h, 1h before) and antihistamine (diphenhydramine)","Antihypertensives","Diuretics only"],a:1,r:"Standard premedication protocol: oral prednisone 50 mg at 13, 7, and 1 hour before contrast + diphenhydramine 50 mg IV/IM 1 hour before. Reduces allergic-like reactions by ~8–10 fold."},
+{t:'contrast',src:'DHA',q:"The mechanism by which gadolinium acts as an MRI contrast agent is:",o:["High atomic number attenuation of X-rays","Shortening T1 relaxation time by promoting rapid energy exchange between water protons and gadolinium ion","Radioactive emission","Direct imaging of gadolinium atoms"],a:1,r:"Gadolinium (7 unpaired electrons): strong paramagnet. Shortens T1 of surrounding water protons → T1 brightening (enhancement) on T1-weighted images."},
+{t:'contrast',src:'ExamCure DHA',q:"CO₂ (carbon dioxide) is used as a contrast agent in:",o:["CT of the chest","Vascular imaging (DSA) in patients with renal failure or iodine allergy","MRI of the brain","Upper GI fluoroscopy"],a:1,r:"CO₂ angiography: CO₂ is a negative (radiolucent) intravascular contrast agent. Used in patients with renal failure (no nephrotoxicity) or severe iodine allergy. Absorbed rapidly by blood. Cannot be used above the diaphragm (risk of air embolism to brain)."},
+
+// ─── ULTRASOUND (10) ───
+{t:'ultrasound',src:'NursingManthra',q:"Ultrasound images are created using which principle?",o:["X-ray attenuation","Magnetic resonance","Reflection of high-frequency sound waves (piezoelectric effect)","Radiotracer emission"],a:2,r:"Piezoelectric crystals convert electrical energy → ultrasound waves (1–20 MHz). Reflected echoes return → converted back to electrical signals → images."},
+{t:'ultrasound',src:'NursingManthra',q:"In Doppler ultrasound, RED typically represents:",o:["Venous blood","Blood flowing toward the transducer","Blood flowing away from transducer","Clotted blood"],a:1,r:"BART convention: Blue Away, Red Toward. RED = toward transducer; BLUE = away. Convention can be reversed by operator."},
+{t:'ultrasound',src:'NursingManthra',q:"A hyperechoic structure on ultrasound appears:",o:["Anechoic (black)","Hypoechoic (dark gray)","Bright white (echogenic)","Isoechoic"],a:2,r:"Hyperechoic: highly reflective → bright/white (e.g., gallstone, bone, calcification). Anechoic: no echoes → black (fluid). Hypoechoic: fewer echoes than surroundings."},
+{t:'ultrasound',src:'NursingManthra',q:"The normal gallbladder appears on ultrasound as:",o:["Hyperechoic (bright)","Anechoic (black/dark) — fluid-filled","Hyperechoic with posterior shadowing","Isoechoic with liver"],a:1,r:"Normal gallbladder: anechoic (bile), hyperechoic wall, posterior enhancement. Gallstones: hyperechoic with posterior acoustic shadowing."},
+{t:'ultrasound',src:'DHA',q:"Posterior acoustic enhancement (increased echoes behind a structure) is associated with:",o:["Calcification","Gas-containing structures","Fluid-filled structures (cysts, vessels)","Dense bone"],a:2,r:"Posterior enhancement: fluid-filled structures attenuate very little sound, so structures behind them receive more sound energy than the surrounding tissue → appear brighter. Confirms cystic nature."},
+{t:'ultrasound',src:'DHA',q:"Posterior acoustic shadowing on ultrasound is caused by:",o:["Fluid-filled structures","Dense reflectors (calcifications, gallstones, bone) that block transmission","Air pockets","Liver parenchyma"],a:1,r:"Acoustic shadow: dense reflectors (stones, bone, calcification) block ultrasound transmission, creating a dark shadow behind. Classic for gallstones (hyperechoic + shadow) and calculi."},
+{t:'ultrasound',src:'NursingManthra',q:"Which ultrasound frequency provides the best depth penetration?",o:["Higher frequency (15 MHz)","Lower frequency (2–5 MHz)","Frequency doesn't affect penetration","50 MHz"],a:1,r:"Lower frequency = more penetration but less resolution. Higher frequency = better resolution but less penetration. Use 2–5 MHz for deep abdomen/pelvis; 7–15 MHz for superficial structures."},
+{t:'ultrasound',src:'DHA',q:"Continuous wave (CW) Doppler is used for:",o:["B-mode (gray-scale) imaging","Measuring very high blood flow velocities (no aliasing limit) — used for stenotic valves","Color flow mapping","3D imaging"],a:1,r:"CW Doppler: no aliasing limit, can measure very high velocities (e.g., severe aortic stenosis velocities of 4–5 m/s). Cannot provide depth information (samples all velocities along the beam)."},
+{t:'ultrasound',src:'ExamCure DHA',q:"The FAST (Focused Assessment with Sonography in Trauma) exam evaluates:",o:["Fractures","Free fluid (blood) in abdomen/pelvis and pericardial effusion in trauma patients","Bowel obstruction","Pulmonary embolism"],a:1,r:"FAST exam: bedside ultrasound in trauma to detect hemoperitoneum (RUQ, LUQ, pelvis) and pericardial effusion (cardiac view). eFAST adds bilateral pleural views for pneumothorax/hemothorax."},
+{t:'ultrasound',src:'DHA',q:"Abdominal aortic aneurysm (AAA) screening by ultrasound is recommended for:",o:["All patients over 40","Men aged 65+ who have ever smoked (one-time screening)","Women only","Annual screening of all adults over 50"],a:1,r:"AAA screening: one-time ultrasound for men aged 65+ who have ever smoked (USPSTF recommendation). AAA = aortic diameter >3 cm. Operative intervention typically at >5.5 cm."},
+
+// ─── NUCLEAR MEDICINE (10) ───
+{t:'nuclear_med',src:'ExamCure DHA',q:"Most commonly used radiopharmaceutical for bone scintigraphy:",o:["I-131","Tc-99m MDP (methylene diphosphonate)","Ga-67 citrate","Tl-201 chloride"],a:1,r:"Tc-99m MDP: taken up by osteoblasts proportional to activity. Detects metastases, fractures, osteomyelitis, and Paget's disease earlier than plain radiographs."},
+{t:'nuclear_med',src:'ExamCure DHA',q:"FDG-PET uses which tracer?",o:["Tc-99m","18F-FDG (fluorodeoxyglucose)","I-131","Ga-67"],a:1,r:"18F-FDG: glucose analog. Malignant cells with high glycolysis accumulate FDG. Positron emitter enables PET imaging of metabolically active lesions."},
+{t:'nuclear_med',src:'ExamCure DHA',q:"I-131 is used therapeutically to treat:",o:["Breast cancer","Differentiated thyroid cancer and hyperthyroidism","Lung cancer","Bone metastases"],a:1,r:"I-131 (beta + gamma emitter): concentrated by thyroid tissue → ablates thyroid cancer cells or hyperfunctioning tissue."},
+{t:'nuclear_med',src:'DHA',q:"The half-life of Tc-99m is approximately:",o:["6 hours","24 hours","8 days","73 days"],a:0,r:"Tc-99m half-life = 6.02 hours. Ideal for nuclear medicine: short enough to limit patient dose, long enough to complete imaging. Decays to Tc-99 by isomeric transition, emitting 140 keV gamma ray."},
+{t:'nuclear_med',src:'DHA',q:"Which radiopharmaceutical is used for myocardial perfusion imaging (MPI)?",o:["Tc-99m MDP","Tc-99m sestamibi (MIBI) or tetrofosmin","I-131","Ga-67 citrate"],a:1,r:"Tc-99m sestamibi or tetrofosmin: taken up by myocardial cells proportional to perfusion. SPECT imaging at rest and stress detects coronary artery disease (fixed vs. reversible defects)."},
+{t:'nuclear_med',src:'ExamCure DHA',q:"The gamma camera (Anger camera) detects gamma rays using:",o:["X-ray film","NaI(Tl) scintillation crystal + PMT array","Solid-state semiconductor directly","Ionization chamber"],a:1,r:"Gamma camera: NaI(Tl) crystal converts gamma photons → light → PMTs convert light → electrical signal. Position and energy discrimination creates planar nuclear medicine images."},
+{t:'nuclear_med',src:'DHA',q:"I-131 has a physical half-life of approximately:",o:["6 hours","2.7 days","8 days","30 years"],a:2,r:"I-131 half-life = 8.02 days. Decays by beta emission (therapeutic) and gamma emission (140–365 keV for imaging). Used for thyroid cancer ablation and hyperthyroidism therapy."},
+{t:'nuclear_med',src:'ExamCure DHA',q:"A ventilation-perfusion (V/Q) scan is used to diagnose:",o:["Pneumonia","Pulmonary embolism","Aortic aneurysm","Hepatic disease"],a:1,r:"V/Q scan: ventilation (inhaled Tc-99m aerosol or Xe-133) and perfusion (injected Tc-99m MAA) scans compared. Mismatched defect (perfused but not ventilated) suggests PE."},
+{t:'nuclear_med',src:'DHA',q:"What does SPECT stand for?",o:["Single Photon Emission Computed Tomography","Spectral Photon Enhanced CT","Standard Perfusion Emission Computed Technique","Single Pulse Electron Computed Tomography"],a:0,r:"SPECT: nuclear medicine 3D imaging technique. Gamma camera rotates around the patient, acquiring projections from multiple angles. Computer reconstructs 3D tomographic slices from 2D projections."},
+{t:'nuclear_med',src:'ExamCure DHA',q:"PET differs from SPECT in that PET uses:",o:["Gamma-emitting radioisotopes with collimators","Positron-emitting radioisotopes; detected by coincidence detection of two 511 keV annihilation photons (no physical collimator needed)","Lower energy gamma emitters","Longer-lived radioisotopes"],a:1,r:"PET: positron → annihilation → two 511 keV photons emitted 180° apart → electronic coincidence detection. No physical collimator needed → higher sensitivity and resolution than SPECT."},
+
+// ─── PATIENT CARE & ETHICS (10) ───
+{t:'patient_care',src:'MOH',q:"Implied consent occurs when:",o:["Patient signs written consent form","Patient cooperates without explicit verbal/written consent","Radiographer assumes consent not needed","Physician gives consent on patient's behalf"],a:1,r:"Implied consent: inferred from cooperative behavior. For routine, low-risk exams, patient cooperation (positioning, following instructions) implies consent."},
+{t:'patient_care',src:'MOH',q:"A competent adult refuses an X-ray. The radiographer should:",o:["Proceed anyway per physician order","Sedate the patient","Respect the refusal, document it, and notify the referring physician","Call security"],a:2,r:"Patient autonomy: competent adults have the right to refuse any procedure. Document clearly and notify the ordering physician."},
+{t:'patient_care',src:'MOH',q:"Which position should be used for a patient with orthopnea needing a chest X-ray?",o:["Supine (flat)","Prone","Erect or elevated Fowler position","Left lateral decubitus"],a:2,r:"Orthopnea = dyspnea when flat. Image upright or in Fowler position (30–45° head elevation) to prevent respiratory distress."},
+{t:'patient_care',src:'ARRT',q:"Standard/Universal precautions require treating which patients as potentially infectious?",o:["Only patients with known infections","Patients who appear visibly ill","ALL patients regardless of diagnosis","Only immunocompromised patients"],a:2,r:"Standard precautions: treat all patients' blood and body fluids as potentially infectious. Hand hygiene, gloves, gowns, masks, safe sharps handling — applied universally."},
+{t:'patient_care',src:'ARRT',q:"The radiographer's primary role in managing a severe contrast reaction is:",o:["Administer epinephrine independently","Stop contrast, call for help/radiologist, monitor vitals, support emergency response","Continue the scan","Ignore if mild symptoms"],a:1,r:"Radiographers: not authorized to administer medications independently. Role: stop contrast, call radiologist immediately, monitor patient, initiate CPR if needed, support emergency team."},
+{t:'patient_care',src:'MOH',q:"Which type of consent is required for an invasive procedure such as ERCP?",o:["Implied consent","Expressed (informed) consent — written or verbal with full information","No consent needed for medical procedures","Only verbal consent"],a:1,r:"Expressed informed consent: patient must be informed of procedure, risks, benefits, alternatives, and right to refuse. Required for invasive procedures. Must be documented."},
+{t:'patient_care',src:'MOH',q:"Normal range for adult blood pressure is approximately:",o:["80/50 mmHg","120/80 mmHg (systolic <130, diastolic <80)","160/100 mmHg","200/90 mmHg"],a:1,r:"Normal adult BP: systolic <130 mmHg, diastolic <80 mmHg (AHA 2017). Hypertension: ≥130/80. Hypotension: systolic <90. Radiographers should recognize abnormal values."},
+{t:'patient_care',src:'ARRT',q:"When a patient is in respiratory distress during a procedure, the first action is:",o:["Complete the scan quickly","Stop the procedure, sit patient upright if possible, call for emergency assistance","Administer oxygen independently","Document and continue"],a:1,r:"Stop procedure immediately. Position patient upright (improves breathing). Call for emergency help/code team. Monitor vital signs. Be prepared to initiate CPR."},
+{t:'patient_care',src:'MOH',q:"The term 'nosocomial infection' refers to:",o:["Infection acquired from contaminated food","Healthcare-associated infection (HAI) acquired during hospital care","Community-acquired infection","Congenital infection"],a:1,r:"Nosocomial (HAI): infection acquired during receipt of healthcare, not present or incubating before admission. Most common: UTI, pneumonia (VAP), SSI, CLABSI."},
+{t:'patient_care',src:'ARRT',q:"A patient experiencing a vasovagal episode (fainting) during a procedure should be:",o:["Kept upright","Placed supine with legs elevated (Trendelenburg); cool cloth to forehead; monitor vitals","Given oral fluids immediately","Discharged immediately"],a:1,r:"Vasovagal syncope: parasympathetic surge → bradycardia + hypotension → fainting. Treatment: supine with legs elevated (increases venous return), cool compress, monitor vitals. Usually self-limiting."},
+
+// ─── INFECTION CONTROL (10) ───
+{t:'infection_ctrl',src:'MOH',q:"Contact precautions for MRSA require the radiographer to:",o:["No special precautions","Gloves only","Gloves and gown; disinfect equipment after exam","Refuse the examination"],a:2,r:"MRSA (contact precautions): gown + gloves. All equipment entering the room (detector, cassette) must be thoroughly disinfected with approved disinfectant before use with other patients."},
+{t:'infection_ctrl',src:'MOH',q:"Which isolation requires a negative pressure room?",o:["Contact precautions","Droplet precautions","Airborne precautions","Standard precautions"],a:2,r:"Airborne precautions (TB, measles, varicella): negative pressure room, N95 respirator for staff, surgical mask for patient when outside room."},
+{t:'infection_ctrl',src:'MOH',q:"Most important measure to prevent healthcare-associated infections (HAIs):",o:["Wearing a lead apron","Proper hand hygiene","Using high-ratio grids","Increasing kVp"],a:1,r:"Hand hygiene: single most important HAI prevention measure. WHO 5 Moments: before patient contact, before aseptic task, after body fluid exposure, after patient contact, after patient's environment contact."},
+{t:'infection_ctrl',src:'MOH',q:"What PPE is required for TB (airborne precautions) in addition to a gown and gloves?",o:["Standard surgical mask","N95 (or higher) fitted respirator","Face shield only","No additional PPE"],a:1,r:"N95 respirator: filters ≥95% of airborne particles. Fit-tested annually. Required for TB, measles, varicella, SARS, MERS, COVID-19 aerosol-generating procedures."},
+{t:'infection_ctrl',src:'ARRT',q:"High-level disinfection (HLD) is required for:",o:["Blood pressure cuffs","X-ray tables","Semi-critical items that contact mucous membranes (e.g., vaginal ultrasound probes)","Lead aprons"],a:2,r:"HLD: destroys all microorganisms except bacterial spores. Required for semi-critical items (mucous membrane contact): endoscopes, US probes for intracavitary use, bronchoscopes."},
+{t:'infection_ctrl',src:'MOH',q:"Sterilization is required for:",o:["Bedpans","Critical items that enter sterile tissue or the vascular system (e.g., surgical instruments, vascular catheters)","CT tables","Lead aprons"],a:1,r:"Sterilization: destroys ALL microorganisms including spores. Required for critical items: instruments entering sterile body cavities, vascular access devices, implants."},
+{t:'infection_ctrl',src:'MOH',q:"Which is the correct order for donning (putting on) PPE?",o:["Mask → gown → gloves → eye protection","Gown → mask/respirator → eye protection → gloves","Gloves → gown → mask → eye protection","Eye protection → gloves → gown → mask"],a:1,r:"Donning order: Gown first → Mask/respirator → Eye protection/face shield → Gloves. Doffing (removing): Gloves first → Eye protection → Gown → Mask last (most contaminated items first, mask last)."},
+{t:'infection_ctrl',src:'ARRT',q:"Clostridium difficile (C. diff) spores are best eliminated by:",o:["Alcohol hand sanitizer","Soap and water hand washing and sporicidal agents (e.g., 10% bleach)","Standard disinfectants","Ultraviolet light alone"],a:1,r:"C. diff spores: NOT killed by alcohol-based hand rub. Require soap and water (physical removal) and sporicidal disinfectants (bleach, hydrogen peroxide). Special C. diff contact precautions."},
+{t:'infection_ctrl',src:'MOH',q:"Appropriate disposal of used needles and sharps in radiology:",o:["Regular waste bin","Labeled puncture-resistant sharps container placed at point of use","Flush down sink","Recap needle before disposal"],a:1,r:"Sharps: immediately into puncture-resistant labeled sharps container at point of use. Never recap, bend, or break needles. Never overfill containers (fill to 3/4 maximum)."},
+{t:'infection_ctrl',src:'ARRT',q:"Which type of transmission requires droplet precautions (surgical mask, single room)?",o:["Tuberculosis","Influenza, pertussis, meningococcal disease (droplet ≥5 μm)","MRSA","HIV"],a:1,r:"Droplet precautions: infections transmitted by droplets ≥5 μm (settle within 1 meter). Influenza, pertussis, meningococcal disease, RSV, mumps, rubella. Surgical mask, eye protection, single room."},
+
+// ─── PEDIATRIC RADIOGRAPHY (10) ───
+{t:'pediatric',src:'ARRT',q:"Children are more radiosensitive than adults because:",o:["More fat tissue","More rapidly dividing cells, longer life expectancy, and smaller body size","Lower kVp requirements","More difficult to position"],a:1,r:"Children: higher mitotic activity (more radiosensitive cells), longer remaining lifespan (more time for stochastic effects), and tissue proximity — justifying extra ALARA efforts."},
+{t:'pediatric',src:'ARRT',q:"The Image Gently campaign aims to:",o:["Improve image sharpness","Reduce radiation dose in pediatric imaging using age-appropriate techniques","Increase fluoroscopy use in children","Standardize adult imaging"],a:1,r:"Image Gently (pediatric) and Image Wisely (adult): encourage reducing mAs, restricting beam, using pediatric protocols, and considering imaging necessity."},
+{t:'pediatric',src:'ARRT',q:"Preferred immobilization method for a young child during radiography:",o:["Physical restraint by radiographer","Parent/guardian assistance with appropriate lead shielding","Sedation for all exams","Tape without assistance"],a:1,r:"Parent/guardian can hold child if properly shielded (lead apron) and not in primary beam. Sedation reserved for cases where essential imaging is impossible to obtain otherwise."},
+{t:'pediatric',src:'DHA',q:"For pediatric patients, how should exposure factors be adjusted compared to adults?",o:["Use exactly the same factors","Lower mAs (smaller patient = less attenuation), may use lower kVp, smaller field size","Higher mAs for motion control","Double the adult technique"],a:1,r:"Pediatric techniques: lower mAs (thinner anatomy), appropriate kVp for body part, small field size, strict collimation. Use pediatric-specific technique charts. Do NOT use adult protocols."},
+{t:'pediatric',src:'ARRT',q:"Which condition in children causes the appearance of 'fraying' or 'cupping' at the metaphysis on radiographs?",o:["Osteosarcoma","Rickets (Vitamin D deficiency)","Scurvy","Osteomyelitis"],a:1,r:"Rickets: deficient calcification of growth cartilage and osteoid → widened, irregular, frayed, cupped metaphyses ('champagne glass' deformity). Most common: Vitamin D deficiency."},
+{t:'pediatric',src:'DHA',q:"The 'classic corner' or 'bucket handle' fractures in children on X-ray are associated with:",o:["Normal rough play","Non-accidental injury (child abuse)","Rickets","Osteogenesis imperfecta"],a:1,r:"Classic metaphyseal lesions (corner/bucket handle fractures) are highly specific for non-accidental injury (child abuse). They occur at the corner of the metaphysis from violent shaking or twisting forces."},
+{t:'pediatric',src:'ARRT',q:"For a pediatric chest X-ray, which instruction achieves the best inspiration?",o:["Suspended inspiration command","Using a radiolucent positioning aid and exposing at the peak of inspiration (for infants: observe breathing cycle)","Always using a Bucky table","Exposing during expiration"],a:1,r:"For infants (cannot follow commands): watch breathing cycle, expose at peak inspiration. For cooperative children: 'take a deep breath and hold it.' Expiration films: intentionally taken at peak expiration to mimic air trapping or for supine abdomen."},
+{t:'pediatric',src:'DHA',q:"Legg-Calvé-Perthes (LCP) disease is:",o:["Slipped capital femoral epiphysis (SCFE)","Avascular necrosis of the femoral head in children (ages 4–10), appearing as increased density and flattening of femoral head","Osteomyelitis of the hip","Developmental dysplasia of the hip (DDH)" ],a:1,r:"LCP: idiopathic AVN of femoral capital epiphysis. Ages 4–10, male 4:1. Early: increased density (subchondral fracture/crescent sign). Later: fragmentation, reossification, and remodeling of femoral head."},
+{t:'pediatric',src:'ARRT',q:"Epiglottitis on a lateral neck radiograph shows which classic finding?",o:["Subglottic narrowing ('steeple sign')","Swollen, rounded epiglottis ('thumb sign')","Air bronchograms","Tracheal deviation"],a:1,r:"Epiglottitis: bacterial (H. influenzae type b, now rare with vaccination). Lateral neck: swollen, rounded epiglottis = 'thumbprint sign.' EMERGENCY. Do not examine mouth (can trigger laryngospasm)."},
+{t:'pediatric',src:'DHA',q:"Croup (laryngotracheobronchitis) on AP radiograph of the airway shows:",o:["Thumb sign","Steeple sign (subglottic narrowing giving pencil-like trachea)","Mediastinal widening","Pneumothorax"],a:1,r:"Croup: viral (parainfluenza). AP airway: 'steeple sign' — subglottic narrowing creates a church-steeple/pencil-point appearance. Mild condition, usually treated with nebulized epinephrine and steroids."},
+
+// ─── MAMMOGRAPHY (10) ───
+{t:'mammography',src:'ARRT',q:"Standard mammography views are:",o:["AP and lateral only","Craniocaudal (CC) and mediolateral oblique (MLO)","PA and oblique","Axial and tangential"],a:1,r:"Standard two-view mammogram: CC (craniocaudal — top to bottom) and MLO (mediolateral oblique, ~45–60°). Together they image essentially all breast tissue."},
+{t:'mammography',src:'ARRT',q:"Mammography uses which target/filter combination?",o:["Tungsten/aluminum","Molybdenum/molybdenum or rhodium/rhodium","Tungsten/copper","Tungsten/tin"],a:1,r:"Mammography: low-Z targets (Mo or Rh) produce characteristic X-rays at 17–23 keV optimal for soft breast tissue differentiation."},
+{t:'mammography',src:'ARRT',q:"MQSA stands for:",o:["Medical Quality Safety Association","Mammography Quality Standards Act","Mammogram Quality and Safety Administration","Medical Qualifications for Special Applications"],a:1,r:"MQSA (1992, USA): mandates accreditation, annual inspections, and quality control for all mammography facilities."},
+{t:'mammography',src:'DHA',q:"The ACR BI-RADS category 4 describes:",o:["Normal/benign finding — routine screening","Probably benign — short-interval follow-up","Suspicious — biopsy should be considered","Highly suggestive of malignancy"],a:2,r:"BI-RADS 4: Suspicious (low to high suspicion for malignancy). Subdivided: 4A (low), 4B (intermediate), 4C (moderate-high). Tissue sampling (biopsy) recommended."},
+{t:'mammography',src:'ARRT',q:"What finding on mammography is considered a benign calcification?",o:["Fine pleomorphic calcifications","Irregular spiculated mass with calcifications","Coarse, popcorn-like calcifications (fibroadenoma)","Branching calcifications"],a:2,r:"Coarse/popcorn calcifications: benign (fibroadenoma). Round/oval: benign. Skin calcifications: benign. Fine linear/branching: suspicious (DCIS). Fine pleomorphic: suspicious."},
+{t:'mammography',src:'DHA',q:"Breast tomosynthesis (3D mammography) differs from standard 2D mammography in that it:",o:["Uses higher radiation dose only","Acquires multiple low-dose images at different angles to create 3D slabs, reducing tissue overlap and improving lesion detection","Replaces the need for ultrasound","Only images one breast at a time"],a:1,r:"Digital breast tomosynthesis (DBT/3D mammography): X-ray tube moves in an arc acquiring multiple low-dose projections reconstructed into thin slabs. Reduces summation artifacts from overlapping tissue, improving sensitivity and specificity."},
+{t:'mammography',src:'ARRT',q:"The standard compression paddle force in mammography is approximately:",o:["0–5 lbs","25–45 lbs (111–200 N)","100 lbs","5 lbs only"],a:1,r:"Standard compression: 25–45 lbs (111–200 N). Adequate compression: separates overlapping tissue, reduces thickness (less dose), reduces blur, and improves contrast."},
+{t:'mammography',src:'DHA',q:"Which mammographic finding is most suspicious for malignancy?",o:["Round, smooth, well-circumscribed mass","Spiculated mass with irregular margins","Smooth oval mass with halo sign","Skin calcification"],a:1,r:"Spiculated mass with irregular margins: highest concern for malignancy (invasive carcinoma). Spicules = desmoplastic reaction. Smooth oval mass with halo: likely fibroadenoma or cyst."},
+{t:'mammography',src:'ARRT',q:"The automatic exposure control (AEC) in mammography is called the:",o:["Phototimer","Automatic Optimization of Parameters (AOP) or Automatic Exposure Control","Bucky system","Compression paddle sensor"],a:1,r:"AEC/AOP in mammography: automatically selects kVp, target, filter, and mAs based on breast thickness and composition, optimizing dose and image quality for each patient."},
+{t:'mammography',src:'DHA',q:"Dedicated mammography units operate at what kVp range?",o:["100–130 kVp","50–70 kVp","22–35 kVp","5–10 kVp"],a:2,r:"Mammography units: 22–35 kVp. This low kVp is essential to maximize photoelectric interactions in soft breast tissue, providing sufficient contrast between similar-density tissues. Much lower than general radiography."},
+
+// ─── SPECIAL PROCEDURES (10) ───
+{t:'special_proc',src:'PrometricMCQ',q:"ERCP uses fluoroscopy to visualize:",o:["Large bowel","Bile ducts and pancreatic duct via endoscope and contrast","Renal collecting system","The uterus"],a:1,r:"ERCP: side-viewing endoscope → duodenum, contrast → bile and pancreatic ducts, fluoroscopy images biliary and pancreatic ductal systems."},
+{t:'special_proc',src:'PrometricMCQ',q:"Percutaneous transhepatic cholangiography (PTC) involves:",o:["Oral contrast","Needle puncture through liver into intrahepatic bile duct with contrast injection","CT-guided liver biopsy","Nasobiliary tube insertion"],a:1,r:"PTC: when ERCP fails or not feasible. Needle through skin and liver into dilated intrahepatic duct → contrast → opacifies biliary tree under fluoroscopic/US guidance."},
+{t:'special_proc',src:'PrometricMCQ',q:"VCUG (voiding cystourethrography) is used to detect:",o:["Kidney stones","Bladder tumors only","Vesicoureteral reflux (VUR) and urethral anatomy","Renal arterial stenosis"],a:2,r:"VCUG: contrast fills bladder via catheter, patient voids while fluoroscopy performed. Detects VUR (contrast reflux into ureters), posterior urethral valves, urethral strictures."},
+{t:'special_proc',src:'DHA',q:"Digital subtraction angiography (DSA) works by:",o:["Using CT for vascular imaging","Subtracting a mask image (pre-contrast) from contrast-filled images to eliminate bone and soft tissue, leaving only contrast-filled vessels","Adding multiple exposures together","Using gadolinium contrast"],a:1,r:"DSA: pre-contrast 'mask' image is subtracted pixel-by-pixel from subsequent contrast images. Bone and soft tissue are removed, showing only vessels with high contrast and sensitivity."},
+{t:'special_proc',src:'ExamCure DHA',q:"Intravenous urography (IVU/IVP) demonstrates the urinary system by:",o:["Retrograde injection into ureter","IV iodinated contrast filtered by kidneys → opacifies collecting system, ureters, and bladder sequentially","Oral contrast","Barium sulfate"],a:1,r:"IVU: IV iodinated contrast excreted by kidneys → sequential imaging shows nephrogram (kidney parenchyma), then pyelogram (collecting system), then ureter/bladder. Now largely replaced by CT urography."},
+{t:'special_proc',src:'PrometricMCQ',q:"A myelogram involves injection of contrast into:",o:["The epidural space","The subarachnoid (intrathecal) space around the spinal cord","The spinal cord directly","The intervertebral disc"],a:1,r:"Myelography: water-soluble iodinated contrast (or non-ionic) injected into the subarachnoid space via lumbar puncture → outlines the spinal cord, nerve roots, and thecal sac. Performed with fluoroscopy and post-myelogram CT."},
+{t:'special_proc',src:'DHA',q:"Arthrography is a procedure that involves:",o:["Fluoroscopic examination of arteries","Injection of contrast (iodinated, gadolinium, or air) into a joint space for visualization","CT of the joints","Nuclear medicine bone scan"],a:1,r:"Arthrography: contrast injection into joint space under fluoroscopic or US guidance → opacifies joint capsule, ligaments, cartilage, and menisci. Used for shoulder (labrum), knee (menisci), wrist (TFCC)."},
+{t:'special_proc',src:'ExamCure DHA',q:"Trans-arterial hepatic embolization (TACE) is used for:",o:["Portal vein thrombosis","Treating hepatocellular carcinoma or liver metastases by delivering chemotherapy + embolic agents via hepatic artery","Biliary drainage","Liver biopsy"],a:1,r:"TACE: chemotherapy (doxorubicin, cisplatin) + embolic agent (e.g., Lipiodol, drug-eluting beads) delivered selectively into tumor-feeding hepatic artery branches. Reduces tumor blood supply + delivers local chemotherapy."},
+{t:'special_proc',src:'DHA',q:"Hysterosalpingography (HSG) uses which contrast agent?",o:["Barium sulfate","Water-soluble iodinated contrast (non-ionic preferred)","Air only","Gadolinium"],a:1,r:"HSG: non-ionic water-soluble iodinated contrast injected through cervix into uterine cavity and fallopian tubes. Evaluates uterine cavity morphology and tubal patency for infertility workup."},
+{t:'special_proc',src:'ExamCure DHA',q:"Nephrostomy tube placement is performed to:",o:["Measure renal blood flow","Provide percutaneous drainage of an obstructed kidney by inserting a tube through the skin into the renal pelvis","Obtain kidney biopsy","Evaluate renal function"],a:1,r:"Percutaneous nephrostomy (PCN): under fluoroscopic and/or US guidance, a drainage tube is inserted through the flank directly into the renal pelvis to relieve urinary obstruction (stones, stricture, tumor)."},
+];
+
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+let selTopics = TOPICS.map(t=>t.id);
+let quizN = 50;
+let questions = [], answers = [], flags = [];
+let cur = 0, timerInt, t0, elapsed = 0;
+
+// ════════════════════════════════════════════════════════
+// INIT UI
+// ════════════════════════════════════════════════════════
+(function initUI(){
+  const tg = document.getElementById('topic-grid');
+  TOPICS.forEach(tp=>{
+    const div = document.createElement('div');
+    div.className = 'tc sel';
+    div.dataset.id = tp.id;
+    div.innerHTML = `<span class="tc-ico">${tp.ico}</span><span class="tc-name">${tp.name}</span><span class="tc-check"></span>`;
+    div.onclick = ()=>{
+      div.classList.toggle('sel');
+      selTopics = [...document.querySelectorAll('.tc.sel')].map(d=>d.dataset.id);
+      document.getElementById('btn-start').disabled = selTopics.length === 0;
+    };
+    tg.appendChild(div);
+  });
+})();
+
+function selAll(v){
+  document.querySelectorAll('.tc').forEach(d=>{ d.classList[v?'add':'remove']('sel'); });
+  selTopics = v ? TOPICS.map(t=>t.id) : [];
+  document.getElementById('btn-start').disabled = !v;
+}
+
+function setN(n, el){
+  document.querySelectorAll('.ql').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  quizN = n;
+}
+
+// ════════════════════════════════════════════════════════
+// QUIZ START
+// ════════════════════════════════════════════════════════
+async function beginQuiz(){
+  showScr('scr-loading');
+  setBar(5);
+  setStatus('Selecting questions from base bank...');
+
+  let pool = BASE_QS.filter(q => selTopics.includes(q.t));
+  setBar(25);
+
+  const needed = Math.max(0, quizN - pool.length);
+  if(needed > 0){
+    setStatus(`Generating ${needed} AI questions with Claude...`);
+    const aiQs = await generateAIQuestions(selTopics, needed, p=>setBar(25 + p*65));
+    pool = [...pool, ...aiQs];
+  }
+
+  setBar(95);
+  setStatus('Shuffling and preparing your quiz...');
+  questions = shuffle(pool).slice(0, quizN);
+  answers = new Array(questions.length).fill(null);
+  flags = new Array(questions.length).fill(false);
+  cur = 0; elapsed = 0;
+
+  buildMap(); buildSbTopics(); renderQ(); startTimer();
+  setBar(100);
+  showScr('scr-quiz');
+  document.getElementById('timer').style.display = 'flex';
+  document.getElementById('hpill').style.display = 'flex';
+  document.getElementById('hp-t').textContent = questions.length;
+}
+
+// ════════════════════════════════════════════════════════
+// AI GENERATION
+// ════════════════════════════════════════════════════════
+async function generateAIQuestions(topicIds, count, progressCb){
+  const batchSize = 20;
+  let allQs = [];
+  const batches = Math.ceil(count / batchSize);
+
+  for(let b = 0; b < batches; b++){
+    const bCount = Math.min(batchSize, count - allQs.length);
+    if(bCount <= 0) break;
+
+    const batchTopics = topicIds.slice((b*3) % topicIds.length).slice(0, Math.min(4, topicIds.length));
+    const batchTopicNames = batchTopics.map(id=>TOPICS.find(t=>t.id===id)?.name||id).join(', ');
+
+    setStatus(`Generating batch ${b+1}/${batches}: ${batchTopicNames}...`);
+
+    const prompt = `You are a Gulf Prometric Radiography exam expert creating MCQ questions for DHA, MOH, HAAD, SCFHS, QCHP, OMSB, and NHRA licensing exams.
+
+Generate exactly ${bCount} multiple-choice questions on these radiography topics: ${batchTopicNames}.
+
+Rules:
+- Each question must have exactly 4 options (A, B, C, D)
+- Match Prometric exam difficulty and style for Gulf radiographers
+- Include clinical scenario questions where appropriate
+- Cover diverse subtopics — avoid repeating basic knowledge
+- Include numerical values, calculations, and specific facts where relevant
+- Map each question to topic IDs from: ${topicIds.join(', ')}
+
+Return ONLY a valid JSON array, no markdown, no explanation:
+[{"t":"topic_id","q":"Question?","o":["A","B","C","D"],"a":0,"r":"Explanation of correct answer (2–3 sentences)","src":"DHA Prometric"}]
+
+where "a" is the 0-based index of the correct answer.`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:3500,
+          messages:[{role:'user',content:prompt}]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.[0]?.text || '[]';
+      const clean = text.replace(/```json|```/g,'').trim();
+      const parsed = JSON.parse(clean);
+      if(Array.isArray(parsed)) allQs = [...allQs, ...parsed];
+    } catch(e){
+      console.warn('AI batch failed:', e);
+    }
+    progressCb((b+1)/batches);
+    if(b < batches-1) await new Promise(r=>setTimeout(r,400));
+  }
+  return allQs;
+}
+
+async function genMoreQs(){
+  toast('✨ Generating 25 fresh questions...');
+  const topics = [...new Set(questions.map(q=>q.t))];
+  try {
+    const newQs = await generateAIQuestions(topics, 25, ()=>{});
+    if(newQs.length > 0){
+      BASE_QS.push(...newQs);
+      toast(`✅ ${newQs.length} questions added to the bank! Restart to use them.`);
+    }
+  } catch(e){ toast('⚠️ Generation failed. Check connection.'); }
+}
+
+// ════════════════════════════════════════════════════════
+// QUIZ RENDERING
+// ════════════════════════════════════════════════════════
+function buildMap(){
+  const m = document.getElementById('qmap');
+  m.innerHTML = '';
+  questions.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'qd'; d.textContent = i+1;
+    d.onclick = ()=>{ cur=i; renderQ(); };
+    m.appendChild(d);
+  });
+}
+
+function buildSbTopics(){
+  const sb = document.getElementById('sb-topics');
+  sb.innerHTML = '';
+  const tIds = [...new Set(questions.map(q=>q.t))];
+  tIds.forEach(id=>{
+    const tp = TOPICS.find(t=>t.id===id);
+    if(!tp) return;
+    const cnt = questions.filter(q=>q.t===id).length;
+    const d = document.createElement('div');
+    d.className = 'sb-topic';
+    d.dataset.id = id;
+    d.innerHTML = `<span class="sb-topic-name">${tp.ico} ${tp.name}</span><span class="sb-topic-cnt">${cnt}</span>`;
+    d.onclick = ()=>{
+      const idx = questions.findIndex(q=>q.t===id);
+      if(idx>=0){ cur=idx; renderQ(); }
+      document.querySelectorAll('.sb-topic').forEach(el=>el.classList.remove('act'));
+      d.classList.add('act');
+    };
+    sb.appendChild(d);
+  });
+}
+
+function updateMap(){
+  document.querySelectorAll('.qd').forEach((d,i)=>{
+    let cls = 'qd';
+    if(i===cur) cls += ' cur';
+    else if(answers[i]!==null) cls += flags[i]?' flag ans':' ans';
+    else if(flags[i]) cls += ' flag';
+    d.className = cls;
+  });
+}
+
+function renderQ(){
+  const q = questions[cur];
+  const tpName = TOPICS.find(t=>t.id===q.t)?.name || q.t;
+  const tpIco = TOPICS.find(t=>t.id===q.t)?.ico || '•';
+
+  document.getElementById('hp-c').textContent = cur+1;
+  document.getElementById('pbar').style.width = ((cur+1)/questions.length*100)+'%';
+  document.getElementById('qprog-fill').style.width = ((cur+1)/questions.length*100)+'%';
+
+  const area = document.getElementById('qarea');
+  area.innerHTML = `
+    <div class="qcard">
+      <div class="qmeta">
+        <div class="qnum">Q${cur+1} of ${questions.length}${flags[cur]?' 🚩':''}</div>
+        <div class="qsrc-tag">${q.src||'Prometric'}</div>
+      </div>
+      <div class="qtopic-badge">${tpIco} ${tpName}</div>
+      <div class="qtext">${q.q}</div>
+      <div class="opts">
+        ${q.o.map((o,i)=>`
+          <button class="opt${answers[cur]===i?' sel':''}" id="opt${i}" onclick="pick(${i})">
+            <span class="opt-key">${String.fromCharCode(65+i)}</span>
+            <span>${o}</span>
+          </button>`).join('')}
+      </div>
+      <div class="explanation${answers[cur]!==null?' show':''}" id="exp">
+        <strong>📚 Explanation</strong>${q.r||'Refer to standard radiography references.'}
+      </div>
+    </div>`;
+
+  if(answers[cur]!==null) showFeedback(answers[cur]);
+  document.getElementById('bn-prev').disabled = cur===0;
+  document.getElementById('bn-next').disabled = cur===questions.length-1;
+  updateMap();
+  document.getElementById('quiz-main').scrollTo({top:0,behavior:'smooth'});
+}
+
+function pick(idx){
+  if(answers[cur]!==null) return;
+  answers[cur] = idx;
+  showFeedback(idx);
+  updateMap();
+}
+
+function showFeedback(sel){
+  const q = questions[cur];
+  document.querySelectorAll('.opt').forEach((b,i)=>{
+    b.disabled = true;
+    if(i===q.a) b.classList.add('cor');
+    else if(i===sel && sel!==q.a) b.classList.add('wrg');
+    b.classList.remove('sel');
+  });
+  const exp = document.getElementById('exp');
+  if(exp) exp.classList.add('show');
+}
+
+function nav(d){ cur = Math.max(0, Math.min(questions.length-1, cur+d)); renderQ(); }
+function flagQ(){ flags[cur] = !flags[cur]; renderQ(); }
+function confirmSub(){
+  const un = answers.filter(a=>a===null).length;
+  if(un > 0 && !confirm(`${un} unanswered question${un>1?'s':''}. Submit anyway?`)) return;
+  submitQuiz();
+}
+
+// ════════════════════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════════════════════
+function startTimer(){
+  t0 = Date.now() - elapsed;
+  const td = document.getElementById('tdis');
+  const te = document.getElementById('timer');
+  timerInt = setInterval(()=>{
+    elapsed = Date.now() - t0;
+    const s = Math.floor(elapsed/1000), m = Math.floor(s/60), sc = s%60;
+    td.textContent = String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');
+    te.className = m>=140?'dng':m>=120?'warn':'';
+  }, 500);
+}
+function stopTimer(){ clearInterval(timerInt); }
+function fmtTime(ms){ const s=Math.floor(ms/1000),m=Math.floor(s/60),sc=s%60; return `${m}m ${String(sc).padStart(2,'0')}s`; }
+
+// ════════════════════════════════════════════════════════
+// RESULTS
+// ════════════════════════════════════════════════════════
+function submitQuiz(){
+  stopTimer();
+  const correct = answers.filter((a,i)=>a===questions[i].a).length;
+  const wrong = answers.filter((a,i)=>a!==null&&a!==questions[i].a).length;
+  const skipped = answers.filter(a=>a===null).length;
+  const pct = Math.round((correct/questions.length)*100);
+
+  showScr('scr-results');
+  document.getElementById('timer').style.display='none';
+  document.getElementById('hpill').style.display='none';
+  document.getElementById('pbar').style.width='100%';
+
+  const circ = 2*Math.PI*68;
+  const arc = document.getElementById('arc');
+  setTimeout(()=>{
+    arc.style.strokeDashoffset = circ - (circ*pct/100);
+    const col = pct>=75?'var(--ok3)':pct>=55?'var(--warn3)':'var(--err3)';
+    arc.style.stroke = col;
+    document.getElementById('rpct').textContent = pct+'%';
+    document.getElementById('rpct').style.color = col;
+  }, 100);
+
+  const pass = pct >= 55;
+  document.getElementById('rtitle').textContent = pct>=80?'Excellent — Exam Ready!':pct>=65?'Well Done — Keep Reviewing!':pct>=55?'Passing — Study Weak Areas':'Needs More Preparation';
+  const badge = document.getElementById('pass-badge');
+  badge.className = 'pass-badge '+(pass?'ok':'fail');
+  badge.textContent = pass ? '✓ PASSING (≥55%)' : '✗ BELOW PASSING (<55%)';
+  document.getElementById('rsub').textContent = pass
+    ? `You scored ${pct}% — above the estimated 55% pass threshold for DHA/MOH Prometric.`
+    : `You scored ${pct}% — review the incorrect answers below and practice more.`;
+
+  document.getElementById('rs-c').textContent = correct;
+  document.getElementById('rs-w').textContent = wrong;
+  document.getElementById('rs-s').textContent = skipped;
+  document.getElementById('rs-t').textContent = fmtTime(elapsed);
+
+  // Domain breakdown
+  const tMap = {};
+  questions.forEach((q,i)=>{
+    if(!tMap[q.t]) tMap[q.t] = {c:0,tot:0,name:TOPICS.find(t=>t.id===q.t)?.name||q.t,ico:TOPICS.find(t=>t.id===q.t)?.ico||'•'};
+    tMap[q.t].tot++;
+    if(answers[i]===q.a) tMap[q.t].c++;
+  });
+  const dg = document.getElementById('domain-grid');
+  dg.innerHTML = '';
+  Object.values(tMap).forEach(td=>{
+    const p = Math.round((td.c/td.tot)*100);
+    const cls = p<55?'low':p<75?'mid':'';
+    dg.innerHTML += `<div class="dcard">
+      <div class="dcard-name">${td.ico} ${td.name}</div>
+      <div class="dbar-wrap"><div class="dbar ${cls}" style="width:${p}%"></div></div>
+      <div class="dpct-row"><span>${td.c}/${td.tot} correct</span><span>${p}%</span></div>
+    </div>`;
+  });
+
+  // Review
+  const rl = document.getElementById('rev-list');
+  rl.innerHTML = '';
+  let cnt = 0;
+  questions.forEach((q,i)=>{
+    if(answers[i]===q.a) return;
+    cnt++;
+    const ya = answers[i]!==null ? `${String.fromCharCode(65+answers[i])}. ${q.o[answers[i]]}` : 'Not answered';
+    const tp = TOPICS.find(t=>t.id===q.t);
+    rl.innerHTML += `<div class="rev-card">
+      <div class="rev-meta">
+        <span class="rev-num">Q${i+1}</span>
+        <span class="rev-badge">${q.src||'Prometric'}</span>
+        <span class="rev-badge" style="color:var(--acc3);border-color:rgba(96,165,250,.25)">${tp?.ico||''} ${tp?.name||q.t}</span>
+      </div>
+      <div class="rev-q">${q.q}</div>
+      <div class="rev-answers">
+        <div class="rev-a wrong"><span>✗</span><span>${answers[i]!==null?'Your answer: '+ya:'Not answered'}</span></div>
+        <div class="rev-a corr"><span>✓</span><span>Correct: ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</span></div>
+      </div>
+      <div class="rev-exp"><strong>Explanation:</strong> ${q.r||''}</div>
+    </div>`;
+  });
+  if(cnt===0) rl.innerHTML = '<div style="text-align:center;padding:48px;color:var(--ok3);font-family:var(--sans);font-size:1.4rem;font-weight:700">🎯 Perfect Score! All answers correct!</div>';
+}
+
+function restart(){
+  stopTimer();
+  showScr('scr-start');
+  document.getElementById('timer').style.display='none';
+  document.getElementById('hpill').style.display='none';
+  document.getElementById('pbar').style.width='0';
+}
+
+// ════════════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════════════
+function showScr(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+}
+function setBar(p){ document.getElementById('prog-fill').style.width = p+'%'; }
+function setStatus(t){ document.getElementById('gen-status').textContent = t; }
+function shuffle(a){ return [...a].sort(()=>Math.random()-.5); }
+let toastTO;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTO);
+  toastTO = setTimeout(()=>el.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
